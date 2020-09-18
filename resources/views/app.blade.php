@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html class="h-full">
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <link href="{{ mix('/css/app.css') }}" rel="stylesheet" />
-  <link rel='stylesheet' href='nprogress.css'/>
   <script src="{{ mix('/js/app.js') }}" defer></script>
+  @routes
 </head>
 
-<body>
+<body class="font-sans leading-none text-gray-700 antialiased">
   @inertia
 </body>
 

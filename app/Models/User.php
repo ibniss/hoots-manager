@@ -10,11 +10,9 @@ class User extends Authenticatable
   use HasFactory;
 
   /**
-   * The attributes that are mass assignable.
+   * The attributes that are NOT mass assignable.
    *
    * @var array
    */
-  protected $fillable = [
-    'name', 'wins', 'draws', 'losses'
-  ];
+  protected $guarded = [];
 }

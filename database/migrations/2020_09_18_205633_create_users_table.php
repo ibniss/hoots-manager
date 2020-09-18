@@ -16,9 +16,11 @@ class CreateUsersTable extends Migration
     Schema::create('users', function (Blueprint $table) {
       $table->id();
       $table->string('name');
+      $table->string('decklist');
       $table->integer('wins');
       $table->integer('draws');
       $table->integer('losses');
+      $table->integer('points');
       $table->timestamps();
     });
   }

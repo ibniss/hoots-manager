@@ -14,4 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [UserController::class, 'index']);
+Route::redirect('/', '/users');
+
+Route::name('users.')->group(function () {
+  Route::get('/users', [UserController::class, 'index'])->name('index');
+  Route::post('/users', [UserController::class, 'store'])->name('store');
+});
