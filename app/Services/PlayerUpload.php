@@ -35,7 +35,7 @@ class PlayerUpload
       return $autoData->merge($score);
     });
 
-    $parsed->each(fn ($row) => Player::create($row->toArray()));
+    $parsed->each(fn ($row) => Player::updateOrCreate(['name' => $row['name']], $row->toArray()));
   }
 
   /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PlayerTag;
 use App\Models\Tag;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -34,6 +35,10 @@ class TagController extends Controller
   {
     $tag->default = !$tag->default;
     $tag->save();
+
+    // update all player_tag values to remove unnecessary lines
+    PlayerTag::where('tag_id', $tag->id)->where('value', $tag->default)->delete();
+
     return Redirect::route('tags.index');
   }
 }

@@ -22,6 +22,6 @@ class Tag extends Model
 
   public function players()
   {
-    return $this->belongsToMany(User::class);
+    return $this->belongsToMany(User::class)->using(PlayerTag::class)->withPivot(['value']);
   }
 }

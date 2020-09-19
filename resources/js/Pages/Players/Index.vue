@@ -43,6 +43,9 @@
                             <div class="flex justify-center items-center">
                                 <Checkbox
                                     :checked="player.tag_values[tag.name]"
+                                    @update:checked="
+                                        toggleTag(player, tag.name)
+                                    "
                                 />
                             </div>
                         </td>
@@ -122,6 +125,16 @@ export default {
             const data = new FormData();
             data.append('data', files[0]);
             this.$inertia.post(route('players.store'), data);
+        },
+
+        /**
+         * Toggle a tag value for a player.
+         *
+         * @param {Object} player
+         * @param {String} tagName
+         */
+        toggleTag(player, tagName) {
+            this.$inertia.put(route('players.tags.update', [player, tagName]));
         },
     },
 };
