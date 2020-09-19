@@ -13,7 +13,10 @@
                     >
                         <div
                             class="flex justify-between space-x-1"
-                            @click="sort(col)"
+                            :class="
+                                sortable.includes(col) ? 'cursor-pointer' : ''
+                            "
+                            @click="sortable.includes(col) && sort(col)"
                         >
                             <span>{{
                                 col.charAt(0).toUpperCase() + col.slice(1)
@@ -41,7 +44,10 @@
                         :key="formula.name"
                         class="px-4 py-2 border border-solid border-gray-300"
                     >
-                        <div class="flex space-x-1" @click="sort(formula.name)">
+                        <div
+                            class="flex space-x-1 cursor-pointer"
+                            @click="sort(formula.name)"
+                        >
                             <span>
                                 {{
                                     formula.name.charAt(0).toUpperCase() +
