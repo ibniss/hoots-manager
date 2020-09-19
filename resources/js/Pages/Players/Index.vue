@@ -114,7 +114,7 @@
             </tbody>
         </table>
 
-        <div class="flex justify-end items-center">
+        <div class="flex justify-end items-center space-x-4">
             <input
                 ref="playersCsv"
                 type="file"
@@ -126,6 +126,12 @@
                 @click="$refs.playersCsv.click()"
             >
                 Upload Players CSV
+            </button>
+            <button
+                class="rounded-md px-4 py-3 bg-red-700 text-white hover:bg-red-800"
+                @click="deletePlayers"
+            >
+                Delete all players
             </button>
         </div>
     </div>
@@ -220,6 +226,10 @@ export default {
          */
         toggleTag(player, tagName) {
             this.$inertia.put(route('players.tags.update', [player, tagName]));
+        },
+
+        deletePlayers() {
+            this.$inertia.delete(route('players.delete'));
         },
     },
 };

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Formula;
 use App\Models\Tag;
 use Inertia\Inertia;
 use App\Models\Player;
 use App\Services\Math;
+use App\Models\Formula;
+use App\Models\PlayerTag;
 use Illuminate\Http\Request;
 use App\Services\PlayerUpload;
 use Illuminate\Support\Facades\Redirect;
@@ -68,6 +69,13 @@ class PlayerController extends Controller
   {
     $file = $request->file('data');
     $this->playerUpload->parseCsv($file);
+    return Redirect::route('players.index');
+  }
+
+  public function delete()
+  {
+    Player::truncate();
+    PlayerTag::truncate();
     return Redirect::route('players.index');
   }
 }
