@@ -10,7 +10,7 @@ use MathParser\Interpreting\Evaluator;
 
 class Math
 {
-  private $vars = ['x', 'y', 'z', 'a', 'b', 'c', 'd'];
+  private $vars = ['x', 'y', 'z', 'a', 'b'];
 
   /**
    * Evaluate an equation.
@@ -21,6 +21,10 @@ class Math
    */
   function evaluate(string $equation, array $variables)
   {
+    $variables = collect($variables)->filter(function ($key, $variable) use ($equation) {
+      return Str::contains($equation, $variable);
+    });
+
     // remap variables into single letters
     $i = 0;
     $remappedVariables = collect($variables)->mapWithKeys(function ($variable, $name) use (&$i) {
