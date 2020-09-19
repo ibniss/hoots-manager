@@ -34,7 +34,7 @@ class PlayerController extends Controller
     $formulas = Formula::all();
 
     return Inertia::render('Players/Index', [
-      'columns' => ['name', 'decklist', 'wins', 'draws', 'losses', 'points'],
+      'columns' => ['name', 'decklist', 'deckcount', 'wins', 'draws', 'losses', 'points'],
       'tags' => function () {
         return Tag::all();
       },

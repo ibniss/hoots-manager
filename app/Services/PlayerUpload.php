@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Player;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 
 class PlayerUpload
 {
@@ -36,6 +37,19 @@ class PlayerUpload
     });
 
     $parsed->each(fn ($row) => Player::updateOrCreate(['name' => $row['name']], $row->toArray()));
+
+    $this->updateDeckcounts();
+  }
+
+  private function updateDeckcounts()
+  {
+    $players = Player::all();
+    $deckCounts = $players->groupBy('decklist')->map->count();
+
+    foreach ($players as $player) {
+      $player->deckcount = $deckCounts[$player->decklist];
+      $player->save();
+    }
   }
 
   /**

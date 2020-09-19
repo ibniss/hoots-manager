@@ -33,7 +33,13 @@ mix.js('resources/js/app.js', 'public/js')
                           defaultExtractor: content =>
                               content.match(/[\w-/:.]+(?<!:)/g) || [],
                           whitelistPatternsChildren: [/nprogress/, /tooltip/],
-                          whitelist: ['w-1/2', 'w-1/4', 'w-2/4', 'w-20'],
+                          whitelist: [
+                              'w-1/2',
+                              'w-1/4',
+                              'w-2/4',
+                              'w-20',
+                              'w-40',
+                          ],
                       }),
                   ]
                 : []),

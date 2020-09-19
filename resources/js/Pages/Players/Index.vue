@@ -170,12 +170,14 @@ export default {
     data() {
         return {
             sizes: {
+                deckcount: '40',
                 wins: '20',
                 draws: '20',
                 losses: '20',
                 points: '20',
             },
             sortable: [
+                'deckcount',
                 'points',
                 'wins',
                 'losses',

@@ -17,6 +17,7 @@ class CreatePlayersTable extends Migration
       $table->id();
       $table->string('name');
       $table->string('decklist');
+      $table->integer('deckcount')->nullable();
       $table->integer('wins');
       $table->integer('draws');
       $table->integer('losses');

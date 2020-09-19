@@ -21,7 +21,7 @@ class FormulaController extends Controller
     return Inertia::render('Formulas/Index', [
       'formulas' => fn () => Formula::all(),
       'variables' => function () {
-        $except = ['id', 'created_at', 'updated_at'];
+        $except = ['id', 'decklist', 'name', 'created_at', 'updated_at'];
         return collect(Schema::getColumnListing('players'))->merge(Tag::all()->pluck('name'))->filter(function ($var) use ($except) {
           return !in_array($var, $except);
         })->values();
