@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,4 +20,10 @@ Route::redirect('/', '/users');
 Route::name('users.')->group(function () {
   Route::get('/users', [UserController::class, 'index'])->name('index');
   Route::post('/users', [UserController::class, 'store'])->name('store');
+});
+
+Route::name('tags.')->group(function () {
+  Route::get('/tags', [TagController::class, 'index'])->name('index');
+  Route::post('/tags', [TagController::class, 'store'])->name('store');
+  Route::put('/tags/{tag}', [TagController::class, 'update'])->name('update');
 });
