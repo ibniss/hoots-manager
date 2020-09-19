@@ -19,4 +19,9 @@ class Tag extends Model
   protected $casts = [
     'default' => 'boolean',
   ];
+
+  public function players()
+  {
+    return $this->belongsToMany(User::class);
+  }
 }

@@ -160,8 +160,9 @@ export default {
         /**
          * Create a new tag.
          */
-        createTag() {
-            this.$inertia.post(route('tags.store'), this.newTag);
+        async createTag() {
+            await this.$inertia.post(route('tags.store'), this.newTag);
+            this.newTag.name = '';
         },
     },
 };

@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\TagController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,11 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', '/users');
+Route::redirect('/', '/players');
 
-Route::name('users.')->group(function () {
-  Route::get('/users', [UserController::class, 'index'])->name('index');
-  Route::post('/users', [UserController::class, 'store'])->name('store');
+Route::name('players.')->group(function () {
+  Route::get('/players', [PlayerController::class, 'index'])->name('index');
+  Route::post('/players', [PlayerController::class, 'store'])->name('store');
 });
 
 Route::name('tags.')->group(function () {
