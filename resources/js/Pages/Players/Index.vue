@@ -11,7 +11,21 @@
                         :class="sizes[col] ? `w-${sizes[col]}` : ''"
                         class="px-4 py-2 border border-solid border-gray-300"
                     >
-                        {{ col.charAt(0).toUpperCase() + col.slice(1) }}
+                        <div
+                            class="flex justify-between space-x-1"
+                            @click="sort(col)"
+                        >
+                            <span>{{
+                                col.charAt(0).toUpperCase() + col.slice(1)
+                            }}</span>
+                            <template v-if="sortable.includes(col)">
+                                <FontAwesomeIcon
+                                    v-if="sortBy.col === col"
+                                    :icon="sortBy.asc ? 'sort-up' : 'sort-down'"
+                                />
+                                <FontAwesomeIcon v-else icon="sort" />
+                            </template>
+                        </div>
                     </th>
                     <th
                         v-for="tag in tags"
@@ -22,11 +36,39 @@
                             tag.name.charAt(0).toUpperCase() + tag.name.slice(1)
                         }}
                     </th>
+                    <th
+                        v-for="formula in formulas"
+                        :key="formula.name"
+                        class="px-4 py-2 border border-solid border-gray-300"
+                    >
+                        <div class="flex space-x-1" @click="sort(formula.name)">
+                            <span>
+                                {{
+                                    formula.name.charAt(0).toUpperCase() +
+                                    formula.name.slice(1)
+                                }}
+                            </span>
+                            <FontAwesomeIcon
+                                v-tooltip="formula.equation"
+                                icon="info-circle"
+                            />
+                            <FontAwesomeIcon
+                                v-if="sortBy.col === formula.name"
+                                class="self-end"
+                                :icon="sortBy.asc ? 'sort-up' : 'sort-down'"
+                            />
+                            <FontAwesomeIcon
+                                v-else
+                                class="self-end"
+                                icon="sort"
+                            />
+                        </div>
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <template v-if="players.length > 0">
-                    <tr v-for="player in players" :key="player.id">
+                    <tr v-for="player in filteredData" :key="player.id">
                         <td
                             v-for="col in columns"
                             :key="col"
@@ -48,6 +90,14 @@
                                     "
                                 />
                             </div>
+                        </td>
+
+                        <td
+                            v-for="formula in formulas"
+                            :key="formula.name"
+                            class="px-4 py-2 border border-solid border-gray-300"
+                        >
+                            {{ player[formula.name] }}
                         </td>
                     </tr>
                 </template>
@@ -96,6 +146,10 @@ export default {
             required: true,
             type: Array,
         },
+        formulas: {
+            required: true,
+            type: Array,
+        },
         players: {
             required: true,
             type: Array,
@@ -109,9 +163,40 @@ export default {
                 losses: '20',
                 points: '20',
             },
+            sortable: [
+                'points',
+                'wins',
+                'losses',
+                'draws',
+                ...this.formulas.map(f => f.name),
+            ],
+            sortBy: {
+                col: 'points',
+                asc: false,
+            },
         };
     },
+    computed: {
+        filteredData() {
+            return this.players.slice(0).sort((a, b) => {
+                const comparison = a[this.sortBy.col] - b[this.sortBy.col];
+                return this.sortBy.asc ? comparison : -1 * comparison;
+            });
+        },
+    },
     methods: {
+        /**
+         * Sort by given col.
+         */
+        sort(col) {
+            if (this.sortBy.col === col) {
+                this.sortBy.asc = !this.sortBy.asc;
+            } else {
+                this.sortBy.col = col;
+                this.sortBy.asc = true;
+            }
+        },
+
         /**
          * Send a request with the CSV data uploaded.
          *

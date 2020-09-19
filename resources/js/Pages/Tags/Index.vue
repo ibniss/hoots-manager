@@ -18,7 +18,7 @@
                     <thead>
                         <tr>
                             <th
-                                v-for="col in ['Name', 'Default']"
+                                v-for="col in ['Name', 'Default', '']"
                                 :key="col"
                                 class="px-4 py-2 border border-solid border-gray-300"
                                 :class="`w-${sizes[col]}`"
@@ -42,6 +42,18 @@
                                         <Checkbox
                                             :checked="tag.default"
                                             @update:checked="toggleTag(tag)"
+                                        />
+                                    </div>
+                                </td>
+                                <td
+                                    class="px-4 py-2 border border-solid border-gray-300"
+                                >
+                                    <div
+                                        class="flex justify-center text-red-700"
+                                    >
+                                        <FontAwesomeIcon
+                                            icon="times"
+                                            @click="removeTag(tag)"
                                         />
                                     </div>
                                 </td>
@@ -138,8 +150,9 @@ export default {
     data() {
         return {
             sizes: {
-                Name: '3/4',
+                Name: '2/4',
                 Default: '1/4',
+                '': '1/4',
             },
             newTag: {
                 name: '',
@@ -155,6 +168,10 @@ export default {
          */
         toggleTag(tag) {
             this.$inertia.put(route('tags.update', tag.id));
+        },
+
+        removeTag(tag) {
+            this.$inertia.delete(route('tags.delete', tag.id));
         },
 
         /**

@@ -41,4 +41,12 @@ class TagController extends Controller
 
     return Redirect::route('tags.index');
   }
+
+  public function delete(Tag $tag)
+  {
+    $tag->delete();
+
+    PlayerTag::where('tag_id', $tag->id)->delete();
+    return Redirect::route('tags.index');
+  }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FormulaController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerTagController;
 use App\Http\Controllers\TagController;
@@ -28,4 +29,11 @@ Route::name('tags.')->group(function () {
   Route::get('/tags', [TagController::class, 'index'])->name('index');
   Route::post('/tags', [TagController::class, 'store'])->name('store');
   Route::put('/tags/{tag}', [TagController::class, 'update'])->name('update');
+  Route::delete('/tags/{tag}', [TagController::class, 'delete'])->name('delete');
+});
+
+Route::name('formulas.')->group(function () {
+  Route::get('/formulas', [FormulaController::class, 'index'])->name('index');
+  Route::post('/formulas', [FormulaController::class, 'store'])->name('store');
+  Route::delete('/formulas/{formula}', [FormulaController::class, 'delete'])->name('delete');
 });

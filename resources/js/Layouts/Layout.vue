@@ -19,6 +19,14 @@
                 >
                     Tags
                 </inertia-link>
+                <inertia-link
+                    :href="route('formulas.index')"
+                    :class="
+                        isActive('formulas') ? 'text-white' : 'text-blue-200'
+                    "
+                >
+                    Formulas
+                </inertia-link>
             </div>
         </header>
         <main>
