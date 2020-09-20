@@ -1,37 +1,66 @@
 <template>
     <div>
-        <header
-            class="relative border-b border-gray-200 bg-blue-600 flex items-center justify-between px-4 py-4 sm:px-6 lg:px-8"
-        >
-            <div class="text-blue-100">Hooglandia Feature Picker</div>
-            <div class="flex justify-end space-x-4">
-                <inertia-link
-                    :href="route('players.index')"
-                    :class="
-                        isActive('players') ? 'text-white' : 'text-blue-200'
-                    "
+        <div class="bg-indigo-800">
+            <div class="p-4 sm:px-6 lg:px-8">
+                <nav
+                    class="relative border-b border-indigo-700 flex items-center justify-between pb-4"
                 >
-                    Players
-                </inertia-link>
-                <inertia-link
-                    :href="route('tags.index')"
-                    :class="isActive('tags') ? 'text-white' : 'text-blue-200'"
-                >
-                    Tags
-                </inertia-link>
-                <inertia-link
-                    :href="route('formulas.index')"
-                    :class="
-                        isActive('formulas') ? 'text-white' : 'text-blue-200'
-                    "
-                >
-                    Formulas
-                </inertia-link>
+                    <h2 class="text-indigo-100 font-medium text-lg">
+                        HOOTS Manager
+                    </h2>
+                    <div class="flex justify-end space-x-4">
+                        <inertia-link
+                            :href="route('players.index')"
+                            class="px-3 py-2 rounded-md text-sm font-medium leading-5 hover:text-white hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
+                            :class="
+                                isActive('players')
+                                    ? 'text-indigo-100 bg-indigo-900'
+                                    : 'text-indigo-300'
+                            "
+                        >
+                            Players
+                        </inertia-link>
+                        <inertia-link
+                            :href="route('tags.index')"
+                            class="px-3 py-2 rounded-md text-sm font-medium leading-5 hover:text-white hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
+                            :class="
+                                isActive('tags')
+                                    ? 'text-indigo-100 bg-indigo-900'
+                                    : 'text-indigo-300'
+                            "
+                        >
+                            Tags
+                        </inertia-link>
+                        <inertia-link
+                            :href="route('formulas.index')"
+                            class="px-3 py-2 rounded-md text-sm font-medium leading-5 hover:text-white hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
+                            :class="
+                                isActive('formulas')
+                                    ? 'text-indigo-100 bg-indigo-900'
+                                    : 'text-indigo-300'
+                            "
+                        >
+                            Formulas
+                        </inertia-link>
+                    </div>
+                </nav>
             </div>
-        </header>
-        <main>
-            <div class="flex-1 px-4 py-8 md:p-12 overflow-y-auto" scroll-region>
-                <slot />
+            <header class="py-8 px-4 sm:px-6 lg:px-8 pb-28">
+                <h1 class="text-3xl font-bold leading-tight text-indigo-100">
+                    {{ title }}
+                </h1>
+            </header>
+        </div>
+        <main
+            class="py-8 px-4 sm:px-6 lg:px-8 overflow-y-auto -mt-28"
+            scroll-region
+        >
+            <div class="rounded-lg shadow-lg">
+                <div class="rounded-lg shadow-xs overflow-hidden">
+                    <div class="bg-white p-8">
+                        <slot />
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -39,7 +68,19 @@
 
 <script>
 export default {
+    props: {
+        title: {
+            required: true,
+            type: String,
+        },
+    },
     methods: {
+        /**
+         * Whether a given url is currently active.
+         *
+         * @param {String} url
+         * @returns {Boolean}
+         */
         isActive(url) {
             return location.pathname.substr(1).startsWith(url);
         },

@@ -1,12 +1,18 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
     future: {
         removeDeprecatedGapUtilities: true,
-        purgeLayersByDefault: true
+        purgeLayersByDefault: true,
     },
-    purge: [],
+    experimental: 'all',
     theme: {
-        extend: {}
+        extend: {
+            fontFamily: {
+                sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+            },
+        },
     },
     variants: {},
-    plugins: []
+    plugins: [require('@tailwindcss/custom-forms')],
 };

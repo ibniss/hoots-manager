@@ -1,10 +1,14 @@
 <template>
     <div
-        class="rounded-md h-8 w-8 flex justify-center items-center cursor-pointer"
-        :class="checked ? 'bg-green-500' : 'bg-gray-500'"
+        class="rounded-full shadow-xs h-9 w-9 flex justify-center items-center cursor-pointer"
+        :class="checked ? 'bg-green-500' : 'bg-gray-300'"
         @click="$emit('update:checked', !checked)"
     >
-        <FontAwesomeIcon class="text-white" :icon="checked ? 'check' : 'ban'" />
+        <FontAwesomeIcon
+            v-if="checked"
+            class="text-green-100"
+            :icon="'check'"
+        />
     </div>
 </template>
 
