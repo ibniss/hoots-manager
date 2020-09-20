@@ -45,16 +45,13 @@
                     </div>
                 </nav>
             </div>
-            <header class="py-8 px-4 sm:px-6 lg:px-8 pb-28">
+            <header class="py-8 px-4 sm:px-6 lg:px-8 pb-44">
                 <h1 class="text-3xl font-bold leading-tight text-indigo-100">
                     {{ title }}
                 </h1>
             </header>
         </div>
-        <main
-            class="py-8 px-4 sm:px-6 lg:px-8 overflow-y-auto -mt-28"
-            scroll-region
-        >
+        <main class="py-8 px-4 sm:px-6 lg:px-8 overflow-y-auto -mt-40">
             <div class="rounded-lg shadow-lg">
                 <div class="rounded-lg shadow-xs overflow-hidden">
                     <div class="bg-white p-8">

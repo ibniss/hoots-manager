@@ -15,6 +15,12 @@ class PlayerUpload
     'Points' => 'points'
   ];
 
+  /**
+   * Parse a CSV (in a MTGMelee standings format) and store player data.
+   *
+   * @param UploadedFile $file
+   * @return void
+   */
   public function parseCsv(UploadedFile $file)
   {
     $path = $file->getRealPath();
@@ -31,7 +37,7 @@ class PlayerUpload
       $autoData = $autoIndexes->mapWithKeys(fn ($index, $col) => [$this->autoColumns[$col] => $row[$index]]);
 
       // process record col
-      $score = $this->processRecord($row[$recordCol]);
+      $score = $this->parseRecord($row[$recordCol]);
 
       return $autoData->merge($score);
     });
@@ -41,6 +47,11 @@ class PlayerUpload
     $this->updateDeckcounts();
   }
 
+  /**
+   * Update the deckcounts for each player.
+   *
+   * @return void
+   */
   private function updateDeckcounts()
   {
     $players = Player::all();
@@ -53,12 +64,13 @@ class PlayerUpload
   }
 
   /**
-   * Process record from a string into separate values.
+   * Parse a record from a string into separate values.
+   * E.g. '10-2-0' => ['wins' => 10, 'draws' => 0, 'losses' => 2]
    *
    * @param String $score
    * @return array
    */
-  private function processRecord(string $score): array
+  private function parseRecord(string $score): array
   {
     [$wins, $losses, $draws] = Str::of($score)->explode('-');
 

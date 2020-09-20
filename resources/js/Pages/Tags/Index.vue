@@ -175,18 +175,27 @@ export default {
          * @param {Object} tag
          */
         toggleTag(tag) {
-            this.$inertia.put(route('tags.update', tag.id));
+            this.$inertia.put(route('tags.update', tag.id), {
+                only: ['tags'],
+                preserveScroll: true,
+            });
         },
 
         removeTag(tag) {
-            this.$inertia.delete(route('tags.delete', tag.id));
+            this.$inertia.delete(route('tags.delete', tag.id), {
+                only: ['tags'],
+                preserveScroll: true,
+            });
         },
 
         /**
          * Create a new tag.
          */
         async createTag() {
-            await this.$inertia.post(route('tags.store'), this.newTag);
+            await this.$inertia.post(route('tags.store'), this.newTag, {
+                only: ['tags'],
+                preserveScroll: true,
+            });
             this.newTag.name = '';
         },
     },

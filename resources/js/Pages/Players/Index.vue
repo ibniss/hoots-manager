@@ -47,7 +47,7 @@
                 <thead>
                     <tr>
                         <th
-                            v-for="col in columns"
+                            v-for="col in allColumns"
                             :key="col"
                             :class="
                                 (sizes[col] ? sizes[col] : '') +
@@ -59,7 +59,19 @@
                             @click="sortable.includes(col) && sort(col)"
                         >
                             <div class="flex items-center justify-between">
-                                <span>{{ col }}</span>
+                                <span
+                                    class="inline-flex justify-between items-center space-x-0.5"
+                                >
+                                    <span>{{ col }}</span>
+                                    <FontAwesomeIcon
+                                        v-if="findFormula(col)"
+                                        v-tooltip="{
+                                            content: findFormula(col).equation,
+                                            classes: 'font-mono',
+                                        }"
+                                        icon="info-circle"
+                                    />
+                                </span>
                                 <template v-if="sortable.includes(col)">
                                     <FontAwesomeIcon
                                         v-if="sortBy.col === col"
@@ -74,44 +86,6 @@
                                         icon="sort"
                                     />
                                 </template>
-                            </div>
-                        </th>
-                        <th
-                            v-for="tag in tags"
-                            :key="tag.name"
-                            class="px-5 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                            {{ tag.name }}
-                        </th>
-                        <th
-                            v-for="formula in formulas"
-                            :key="formula.name"
-                            class="px-5 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                            @click="sort(formula.name)"
-                        >
-                            <div class="flex justify-between items-center">
-                                <span
-                                    class="inline-flex justify-between items-center space-x-0.5"
-                                >
-                                    <span>{{ formula.name }}</span>
-                                    <FontAwesomeIcon
-                                        v-tooltip="{
-                                            content: formula.equation,
-                                            classes: 'font-mono',
-                                        }"
-                                        icon="info-circle"
-                                    />
-                                </span>
-                                <FontAwesomeIcon
-                                    v-if="sortBy.col === formula.name"
-                                    class="float-right"
-                                    :icon="sortBy.asc ? 'sort-up' : 'sort-down'"
-                                />
-                                <FontAwesomeIcon
-                                    v-else
-                                    class="float-right"
-                                    icon="sort"
-                                />
                             </div>
                         </th>
                     </tr>
@@ -235,9 +209,33 @@ export default {
                     return this.sortBy.asc ? comparison : -1 * comparison;
                 });
         },
+
+        /**
+         * Get all table columns.
+         *
+         * @returns {Array<String>}
+         */
+        allColumns() {
+            return [
+                ...this.columns,
+                ...this.tags.map(t => t.name),
+                ...this.formulas.map(f => f.name),
+            ];
+        },
     },
     methods: {
         sentenceCase,
+
+        /**
+         * Find a formula by its name.
+         *
+         * @param {String} col
+         * @returns {Object|undefined}
+         */
+        findFormula(col) {
+            return this.formulas.find(f => f.name === col);
+        },
+
         /**
          * Sort the data by given col.
          *

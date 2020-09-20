@@ -63,7 +63,7 @@ class PlayerController extends Controller
    * Store players from a CSV upload.
    *
    * @param Request $request
-   * @return void
+   * @return \Illuminate\Http\RedirectResponse
    */
   public function store(Request $request)
   {
@@ -72,6 +72,11 @@ class PlayerController extends Controller
     return Redirect::route('players.index');
   }
 
+  /**
+   * Wipe all player data.
+   *
+   * @return \Illuminate\Http\RedirectResponse
+   */
   public function delete()
   {
     Player::truncate();

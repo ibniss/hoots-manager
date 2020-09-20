@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Redirect;
 
 class TagController extends Controller
 {
+  /**
+   * View all tags.
+   *
+   * @return \Inertia\Response
+   */
   public function index()
   {
     return Inertia::render('Tags/Index', [
@@ -20,17 +25,23 @@ class TagController extends Controller
   }
 
   /**
-   * Creates a new tag.
+   * Create a new tag.
    *
    * @param Request $request
-   * @return void
+   * @return \Illuminate\Http\RedirectResponse
    */
   public function store(Request $request)
   {
-    $tag = Tag::create($request->only(['name', 'default']));
+    Tag::create($request->only(['name', 'default']));
     return Redirect::route('tags.index');
   }
 
+  /**
+   * Update a tag default value.
+   *
+   * @param Tag $tag
+   * @return \Illuminate\Http\RedirectResponse
+   */
   public function update(Tag $tag)
   {
     $tag->default = !$tag->default;
@@ -42,6 +53,12 @@ class TagController extends Controller
     return Redirect::route('tags.index');
   }
 
+  /**
+   * Delete a tag.
+   *
+   * @param Tag $tag
+   * @return \Illuminate\Http\RedirectResponse
+   */
   public function delete(Tag $tag)
   {
     $tag->delete();

@@ -5,11 +5,14 @@ namespace App\Services;
 use Exception;
 use FormulaParser\FormulaParser;
 use Illuminate\Support\Str;
-use MathParser\StdMathParser;
-use MathParser\Interpreting\Evaluator;
 
 class Math
 {
+  /**
+   * Allowed internal variables. The currently used math parser only supports up to 5 variables.
+   *
+   * @var array
+   */
   private $vars = ['x', 'y', 'z', 'a', 'b'];
 
   /**
@@ -35,8 +38,8 @@ class Math
       return $ret;
     });
 
+    // replace the variables in the equation string
     $eq = Str::of($equation);
-
     foreach ($remappedVariables as $letter => $variable) {
       $eq = $eq->replaceFirst($variable, $letter);
     }

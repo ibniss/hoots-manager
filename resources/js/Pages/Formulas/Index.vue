@@ -196,7 +196,10 @@ export default {
          * Create a new formula.
          */
         async createFormula() {
-            await this.$inertia.post(route('formulas.store'), this.newFormula);
+            await this.$inertia.post(route('formulas.store'), this.newFormula, {
+                only: ['formulas'],
+                preserveScroll: true,
+            });
             this.newFormula.equation = '';
             this.newFormula.equation = '';
         },
@@ -207,7 +210,10 @@ export default {
          * @param {Object} formula
          */
         async deleteFormula(formula) {
-            await this.$inertia.delete(route('formulas.delete', formula.id));
+            await this.$inertia.delete(route('formulas.delete', formula.id), {
+                only: ['formulas'],
+                preserveScroll: true,
+            });
         },
     },
 };

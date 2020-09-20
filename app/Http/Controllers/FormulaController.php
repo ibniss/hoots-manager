@@ -30,17 +30,23 @@ class FormulaController extends Controller
   }
 
   /**
-   * Creates a new formula;
+   * Create a new formula.
    *
    * @param Request $request
-   * @return void
+   * @return \Illuminate\Http\RedirectResponse
    */
   public function store(Request $request)
   {
-    $formula = Formula::create($request->only(['name', 'equation']));
+    Formula::create($request->only(['name', 'equation']));
     return Redirect::route('formulas.index');
   }
 
+  /**
+   * Delete a formula.
+   *
+   * @param Formula $formula
+   * @return \Illuminate\Http\RedirectResponse
+   */
   public function delete(Formula $formula)
   {
     $formula->delete();
