@@ -17,3 +17,62 @@ The application is in a very early development stage. The currently supported fe
 -   [Laravel](https://laravel.com/),
 -   [Vue.js](https://vuejs.org/),
 -   [Inertia.js](https://inertiajs.com/)
+
+## Installation
+
+Clone the repo locally:
+
+```sh
+git clone https://github.com/ibniss/hoots-manager.git hoots-manager
+cd hoots-manager
+```
+
+Install PHP dependencies:
+
+```sh
+composer install
+```
+
+Install NPM dependencies:
+
+```sh
+yarn
+```
+
+Build assets:
+
+```sh
+yarn dev
+```
+
+Setup configuration:
+
+```sh
+cp .env.example .env
+```
+
+Generate application key:
+
+```sh
+php artisan key:generate
+```
+
+Create an SQLite database. You can also use another database (MySQL, Postgres), simply update your configuration accordingly.
+
+```sh
+touch database/database.sqlite
+```
+
+Run database migrations:
+
+```sh
+php artisan migrate
+```
+
+Run the dev server (the output will give the address):
+
+```sh
+php artisan serve
+```
+
+You're ready to go!
