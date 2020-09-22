@@ -1,7 +1,9 @@
 <template>
     <div
-        class="rounded-full shadow-xs h-9 w-9 flex justify-center items-center cursor-pointer"
-        :class="checked ? 'bg-green-500' : 'bg-gray-300'"
+        class="rounded-full shadow-xs flex justify-center items-center cursor-pointer"
+        :class="
+            (checked ? 'bg-green-500' : 'bg-gray-300') + ` h-${size} w-${size}`
+        "
         @click="$emit('update:checked', !checked)"
     >
         <FontAwesomeIcon
@@ -11,13 +13,16 @@
         />
     </div>
 </template>
-
 <script>
 export default {
     props: {
         checked: {
             required: true,
             type: Boolean,
+        },
+        size: {
+            type: String,
+            default: '9',
         },
     },
 };

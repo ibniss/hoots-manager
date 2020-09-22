@@ -11,6 +11,8 @@ import {
     faTrashAlt,
     faUpload,
     faSearch,
+    faSyncAlt,
+    faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 
@@ -30,4 +32,6 @@ export default () => {
     library.add(faTrashAlt);
     library.add(faUpload);
     library.add(faSearch);
+    library.add(faSyncAlt);
+    library.add(faChevronDown);
 };
