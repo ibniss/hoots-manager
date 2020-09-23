@@ -14,9 +14,11 @@ The application is in a very early development stage. The currently supported fe
 
 ## The stack
 
--   [Laravel](https://laravel.com/),
--   [Vue.js](https://vuejs.org/),
+-   [Laravel](https://laravel.com/)
+-   [Vue.js](https://vuejs.org/)
 -   [Inertia.js](https://inertiajs.com/)
+-   [tailwindcss](https://tailwindcss.com/)
+-   [heroicons](https://heroicons.com/)
 
 ## Installation
 

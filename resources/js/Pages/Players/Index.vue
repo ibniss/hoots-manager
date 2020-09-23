@@ -8,58 +8,29 @@
                     class="hidden"
                     @change="uploadPlayers"
                 />
-                <div class="relative inline-block text-left">
-                    <div>
-                        <span class="rounded-md shadow-sm">
-                            <v-popover>
-                                <button
-                                    type="button"
-                                    class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-gray-50 text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150"
-                                    aria-haspopup="true"
-                                    aria-expanded="true"
-                                >
-                                    {{ pagination.perPage }} per page
-                                    <FontAwesomeIcon
-                                        class="-mr-1 ml-2 h-5 w-5"
-                                        icon="chevron-down"
-                                    />
-                                </button>
-                                <template #popover>
-                                    <div class="rounded-md bg-white shadow-xs">
-                                        <div
-                                            class="py-1"
-                                            role="menu"
-                                            aria-orientation="vertical"
-                                            aria-labelledby="options-menu"
-                                        >
-                                            <template
-                                                v-for="option in pagination.perPageOptions"
-                                            >
-                                                <span
-                                                    :key="option"
-                                                    v-close-popover
-                                                    class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 cursor-pointer"
-                                                    role="menuitem"
-                                                    @click="
-                                                        pagination.perPage = option
-                                                    "
-                                                >
-                                                    {{ option }} per page
-                                                </span>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </template>
-                            </v-popover>
-                        </span>
-                    </div>
-                </div>
+                <ListBox
+                    id="perPageSelect"
+                    v-model="pagination.perPage"
+                    class="w-40"
+                    :options="pagination.perPageOptions"
+                    :label-resolver="option => `${option} per page`"
+                />
                 <span class="shadow-sm rounded-md">
                     <button
                         class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
                         @click="$refs.playersCsv.click()"
                     >
-                        <FontAwesomeIcon class="mr-2" icon="upload" />
+                        <svg
+                            class="mr-2 h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
                         Upload
                     </button>
                 </span>
@@ -68,7 +39,17 @@
                         class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:shadow-outline focus:border-red-300 active:bg-red-300 transition duration-150 ease-in-out"
                         @click="deletePlayers"
                     >
-                        <FontAwesomeIcon class="mr-2" icon="trash-alt" />
+                        <svg
+                            class="mr-2 h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
                         Delete players
                     </button>
                 </span>
@@ -80,7 +61,17 @@
                     <div
                         class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
                     >
-                        <FontAwesomeIcon class="text-gray-400" icon="search" />
+                        <svg
+                            class="text-gray-400 h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
                     </div>
                     <input
                         id="price"
@@ -95,7 +86,17 @@
                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
                     >
                         <!-- TODO: on click refresh standings from API -->
-                        <FontAwesomeIcon class="h-5" icon="sync-alt" />
+                        <svg
+                            class="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
                     </button>
                 </span>
             </div>
@@ -126,7 +127,7 @@
                                         class="inline-flex justify-between items-center space-x-0.5"
                                     >
                                         <span>{{ column.name }}</span>
-                                        <FontAwesomeIcon
+                                        <svg
                                             v-if="column.type === 'formula'"
                                             v-tooltip="{
                                                 content: findFormula(
@@ -134,27 +135,25 @@
                                                 ).equation,
                                                 classes: 'font-mono',
                                             }"
-                                            icon="info-circle"
-                                        />
+                                            class="h-4 w-4"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
+                                        >
+                                            <path
+                                                fill-rule="evenodd"
+                                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                                clip-rule="evenodd"
+                                            />
+                                        </svg>
                                     </span>
-                                    <template
-                                        v-if="sortable.includes(column.name)"
-                                    >
-                                        <FontAwesomeIcon
-                                            v-if="sortBy.col === column.name"
-                                            class="float-right"
-                                            :icon="
-                                                sortBy.asc
-                                                    ? 'sort-up'
-                                                    : 'sort-down'
-                                            "
-                                        />
-                                        <FontAwesomeIcon
-                                            v-else
-                                            class="float-right"
-                                            icon="sort"
-                                        />
-                                    </template>
+                                    <SortControl
+                                        class="h-4 w-4 text-gray-400"
+                                        :sortable="
+                                            sortable.includes(column.name)
+                                        "
+                                        :sorted="sortBy.col === column.name"
+                                        :ascending="sortBy.asc"
+                                    />
                                 </div>
                             </th>
                         </template>
@@ -163,7 +162,7 @@
                 <tbody class="divide-y divide-gray-200">
                     <template v-if="filteredData.length > 0">
                         <tr
-                            v-for="(player, i) in filteredData"
+                            v-for="(player, i) in paginationData.forPage"
                             :key="player.id"
                             :class="i % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
                         >
@@ -214,49 +213,63 @@
                             </td>
                         </tr>
                     </template>
-                    <tr>
-                        <td
-                            class="text-center px-2 py-1 md:p-2 lg:p-3 xl:p-4 text-sm"
-                            :colspan="allColumns.length"
-                        >
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    Showing
-                                    <span class="font-semibold">1</span> to
-                                    <span class="font-semibold">20</span> of
-                                    <span class="font-semibold">20</span>
-                                    results
-                                </div>
-                                <div
-                                    class="flex justify-end items-center gap-x-4"
-                                >
-                                    <span class="shadow-sm rounded-md">
-                                        <button
-                                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-white bg-white text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
-                                        >
-                                            Previous
-                                        </button>
-                                    </span>
-                                    <span class="shadow-sm rounded-md">
-                                        <button
-                                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-white bg-white text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
-                                        >
-                                            Next
-                                        </button>
-                                    </span>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
+            <!-- TODO: put this outside table to fix responsiveness -->
+
+            <div
+                class="bg-white text-center p-3 text-sm flex justify-between items-center border-t border-gray-200 text-center"
+            >
+                <div>
+                    Showing
+                    <span class="font-semibold">
+                        {{ paginationData.from }}
+                    </span>
+                    to
+                    <span class="font-semibold">
+                        {{ paginationData.to }}
+                    </span>
+                    of
+                    <span class="font-semibold">
+                        {{ filteredData.length }}
+                    </span>
+                    results
+                </div>
+                <div class="flex justify-end items-center gap-x-4">
+                    <span class="shadow-sm rounded-md">
+                        <button
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-white bg-white text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
+                            @click="
+                                pagination.currentPage !== 1 &&
+                                    pagination.currentPage--
+                            "
+                        >
+                            Previous
+                        </button>
+                    </span>
+                    <span class="shadow-sm rounded-md">
+                        <button
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-white bg-white text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
+                            @click="
+                                pagination.currentPage !==
+                                    paginationData.pages &&
+                                    pagination.currentPage++
+                            "
+                        >
+                            Next
+                        </button>
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 <script>
 import Layout from '@/Layouts/Layout';
 import Checkbox from '@/Shared/Checkbox';
-import { sentenceCase } from '@/Services/helpers';
+import ListBox from '@/Shared/ListBox';
+import SortControl from '@/Shared/SortControl';
+import { sentenceCase, paginate } from '@/Services/helpers';
 
 const collator = new Intl.Collator(undefined, {
     sensitivity: 'base',
@@ -265,7 +278,7 @@ const collator = new Intl.Collator(undefined, {
 
 export default {
     layout: (h, page) => h(Layout, { props: { title: 'Players' } }, [page]),
-    components: { Checkbox },
+    components: { Checkbox, SortControl, ListBox },
     props: {
         columns: {
             required: true,
@@ -300,8 +313,9 @@ export default {
                 asc: false,
             },
             pagination: {
-                perPage: 25,
+                perPage: 10,
                 perPageOptions: [10, 25, 50, 100],
+                currentPage: 1,
             },
             hiddenColumns: [],
             query: '',
@@ -309,7 +323,20 @@ export default {
     },
     computed: {
         /**
-         * The table data with applied sorting.
+         * Get the pagination data.
+         *
+         * @returns {ReturnType<paginate>}
+         */
+        paginationData() {
+            return paginate(
+                this.filteredData,
+                this.pagination.currentPage,
+                this.pagination.perPage
+            );
+        },
+
+        /**
+         * The table data with applied filtering & sorting.
          *
          * @returns {Array}
          */

@@ -56,13 +56,11 @@
 .tooltip[aria-hidden='true'] {
     visibility: hidden;
     opacity: 0;
-    transform: scale(0.95);
-    transition: opacity 75ms, visibility 75ms, transform 75ms;
+    transition: opacity 75ms, visibility 75ms;
 }
 
 .tooltip[aria-hidden='false'] {
     visibility: visible;
     opacity: 1;
-    transform: scale(1);
-    transition: opacity 100ms, transform 100ms;
+    transition: opacity 100ms;
 }
