@@ -14,7 +14,7 @@
                     aria-haspopup="listbox"
                     aria-expanded="true"
                     :aria-labelledby="id"
-                    class="cursor-default relative w-full rounded-md border border-gray-300 bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                    class="cursor-default relative w-full rounded-md border border-gray-300 bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5"
                     @click="showPopover = !showPopover"
                 >
                     <slot name="selectedOption" v-bind="{ value }">
@@ -57,19 +57,10 @@
                     >
                         <template v-for="option in options">
                             <li
-                                :id="id + '-0'"
+                                :id="id + '-' + indexResolver(option)"
                                 :key="indexResolver(option)"
                                 role="option"
-                                class="cursor-default select-none relative py-2 pl-3 pr-9"
-                                :class="
-                                    isOptionHovered(option)
-                                        ? 'text-white bg-indigo-600'
-                                        : 'text-gray-900'
-                                "
-                                @mouseenter="
-                                    currentHover = indexResolver(option)
-                                "
-                                @mouseleave="currentHover = null"
+                                class="group cursor-default select-none relative py-2 pl-3 pr-9 text-gray-900 hover:text-white hover:bg-indigo-600"
                                 @click="selectOption(option)"
                             >
                                 <slot name="option" v-bind="{ option }">
@@ -81,12 +72,7 @@
                                 >
                                     <svg
                                         v-if="isOptionSelected(option)"
-                                        class="h-5 w-5"
-                                        :class="
-                                            isOptionHovered(option)
-                                                ? 'text-white'
-                                                : 'text-indigo-600'
-                                        "
+                                        class="h-5 w-5 text-indigo-600 group-hover:text-white"
                                         viewBox="0 0 20 20"
                                         fill="currentColor"
                                     >
@@ -146,7 +132,6 @@ export default {
     },
     data() {
         return {
-            currentHover: null,
             showPopover: false,
         };
     },

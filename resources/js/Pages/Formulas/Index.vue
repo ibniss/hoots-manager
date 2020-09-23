@@ -25,7 +25,7 @@
 
                 <div class="px-6 py-5">
                     <div
-                        class="shadow overflow-hidden border border-gray-200 rounded-lg"
+                        class="shadow overflow-x-auto border border-gray-200 rounded-lg"
                     >
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead>

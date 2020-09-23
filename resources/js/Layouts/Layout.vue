@@ -52,7 +52,7 @@
             </header>
         </div>
         <main class="py-8 px-4 sm:px-6 lg:px-8 overflow-y-auto -mt-40">
-            <div class="rounded-lg shadow-lg">
+            <div id="pageContent" class="rounded-lg shadow-lg">
                 <div class="rounded-lg shadow-xs overflow-hidden">
                     <div class="bg-white p-8">
                         <slot />

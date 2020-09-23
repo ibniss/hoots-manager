@@ -15,6 +15,49 @@
                     :options="pagination.perPageOptions"
                     :label-resolver="option => `${option} per page`"
                 />
+                <ColumnsPicker
+                    id="columnPicker"
+                    :columns="allColumns"
+                    :hidden-columns.sync="hiddenColumns"
+                >
+                    <template #column="{ column }">
+                        <div
+                            class="w-full flex justify-between items-center gap-x-2"
+                        >
+                            <span>{{ column.name }}</span>
+                            <svg
+                                class="h-5 w-5"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                            >
+                                <!-- swap out the svg depending on the tag -->
+                                <template v-if="column.type === 'column'">
+                                    <path
+                                        d="M3 12v3c0 1.657 3.134 3 7 3s7-1.343 7-3v-3c0 1.657-3.134 3-7 3s-7-1.343-7-3z"
+                                    />
+                                    <path
+                                        d="M3 7v3c0 1.657 3.134 3 7 3s7-1.343 7-3V7c0 1.657-3.134 3-7 3S3 8.657 3 7z"
+                                    />
+                                    <path
+                                        d="M17 5c0 1.657-3.134 3-7 3S3 6.657 3 5s3.134-3 7-3 7 1.343 7 3z"
+                                    />
+                                </template>
+                                <path
+                                    v-if="column.type === 'tag'"
+                                    fill-rule="evenodd"
+                                    d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z"
+                                    clip-rule="evenodd"
+                                />
+                                <path
+                                    v-if="column.type === 'formula'"
+                                    fill-rule="evenodd"
+                                    d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm2 1a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zm4-4a1 1 0 100 2h.01a1 1 0 100-2H13zM9 9a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zM7 8a1 1 0 000 2h.01a1 1 0 000-2H7z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                        </div>
+                    </template>
+                </ColumnsPicker>
                 <span class="shadow-sm rounded-md">
                     <button
                         class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
@@ -109,14 +152,18 @@
                     <tr>
                         <template v-for="column in allColumns">
                             <th
-                                v-if="!hiddenColumns.includes(column.name)"
+                                v-if="
+                                    !hiddenColumns.includes(
+                                        column.type + '-' + column.name
+                                    )
+                                "
                                 :key="`th-${column.type}-${column.name}`"
                                 :class="
                                     sortable.includes(column.name)
                                         ? ' cursor-pointer'
                                         : ''
                                 "
-                                class="px-3 py-2 lg:px-4 lg:py-3 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                                class="px-3 py-2 lg:px-4 lg:py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 @click="
                                     sortable.includes(column.name) &&
                                         sort(column.name)
@@ -134,6 +181,7 @@
                                                     column.name
                                                 ).equation,
                                                 classes: 'font-mono',
+                                                boundariesElement: pageContentElement,
                                             }"
                                             class="h-4 w-4"
                                             viewBox="0 0 20 20"
@@ -168,7 +216,9 @@
                         >
                             <template v-for="col in columns">
                                 <td
-                                    v-if="!hiddenColumns.includes(col)"
+                                    v-if="
+                                        !hiddenColumns.includes('column-' + col)
+                                    "
                                     :key="`${player.id}-${col}-column`"
                                     class="px-2 py-1 md:p-2 lg:p-3 xl:p-4 lg:whitespace-no-wrap text-sm"
                                 >
@@ -178,7 +228,11 @@
 
                             <template v-for="tag in tags">
                                 <td
-                                    v-if="!hiddenColumns.includes(tag.name)"
+                                    v-if="
+                                        !hiddenColumns.includes(
+                                            'tag-' + tag.name
+                                        )
+                                    "
                                     :key="`${player.id}-${tag.name}-tag`"
                                     class="px-2 py-1 md:p-2 lg:p-3 xl:p-4 lg:whitespace-no-wrap text-sm"
                                 >
@@ -194,7 +248,11 @@
 
                             <template v-for="formula in formulas">
                                 <td
-                                    v-if="!hiddenColumns.includes(formula.name)"
+                                    v-if="
+                                        !hiddenColumns.includes(
+                                            'formula-' + formula.name
+                                        )
+                                    "
                                     :key="`${player.id}-${formula.name}-formula`"
                                     class="px-2 py-1 md:p-2 lg:p-3 xl:p-4 lg:whitespace-no-wrap text-sm"
                                 >
@@ -215,51 +273,14 @@
                     </template>
                 </tbody>
             </table>
-            <!-- TODO: put this outside table to fix responsiveness -->
-
-            <div
-                class="bg-white text-center p-3 text-sm flex justify-between items-center border-t border-gray-200 text-center"
-            >
-                <div>
-                    Showing
-                    <span class="font-semibold">
-                        {{ paginationData.from }}
-                    </span>
-                    to
-                    <span class="font-semibold">
-                        {{ paginationData.to }}
-                    </span>
-                    of
-                    <span class="font-semibold">
-                        {{ filteredData.length }}
-                    </span>
-                    results
-                </div>
-                <div class="flex justify-end items-center gap-x-4">
-                    <span class="shadow-sm rounded-md">
-                        <button
-                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-white bg-white text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
-                            @click="
-                                pagination.currentPage !== 1 &&
-                                    pagination.currentPage--
-                            "
-                        >
-                            Previous
-                        </button>
-                    </span>
-                    <span class="shadow-sm rounded-md">
-                        <button
-                            class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-white bg-white text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline active:bg-gray-100 active:text-gray-700 transition ease-in-out duration-150"
-                            @click="
-                                pagination.currentPage !==
-                                    paginationData.pages &&
-                                    pagination.currentPage++
-                            "
-                        >
-                            Next
-                        </button>
-                    </span>
-                </div>
+            <div class="border-t border-gray-200 p-3">
+                <Pagination
+                    :from="paginationData.from"
+                    :to="paginationData.to"
+                    :row-count="filteredData.length"
+                    :current-page.sync="pagination.currentPage"
+                    :max-pages="paginationData.pages"
+                />
             </div>
         </div>
     </div>
@@ -269,6 +290,8 @@ import Layout from '@/Layouts/Layout';
 import Checkbox from '@/Shared/Checkbox';
 import ListBox from '@/Shared/ListBox';
 import SortControl from '@/Shared/SortControl';
+import ColumnsPicker from '@/Shared/ColumnsPicker';
+import Pagination from '@/Shared/Pagination';
 import { sentenceCase, paginate } from '@/Services/helpers';
 
 const collator = new Intl.Collator(undefined, {
@@ -278,7 +301,7 @@ const collator = new Intl.Collator(undefined, {
 
 export default {
     layout: (h, page) => h(Layout, { props: { title: 'Players' } }, [page]),
-    components: { Checkbox, SortControl, ListBox },
+    components: { Checkbox, SortControl, ListBox, ColumnsPicker, Pagination },
     props: {
         columns: {
             required: true,
@@ -319,6 +342,7 @@ export default {
             },
             hiddenColumns: [],
             query: '',
+            pageContentElement: null,
         };
     },
     computed: {
@@ -366,6 +390,10 @@ export default {
                 ...this.formulas.map(f => ({ name: f.name, type: 'formula' })),
             ];
         },
+    },
+    mounted() {
+        // we need the right DOM target to allow tooltips to properly fill available space
+        this.pageContentElement = document.querySelector('#pageContent');
     },
     methods: {
         sentenceCase,
