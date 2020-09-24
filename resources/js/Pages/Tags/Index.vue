@@ -1,170 +1,167 @@
 <template>
-    <div class="flex flex-wrap gap-6">
-        <div class="flex-1">
-            <div class="bg-white border shadow overflow-hidden rounded-lg">
-                <div class="px-6 py-5 border-b border-gray-200">
-                    <h3
-                        class="text-lg leading-6 font-medium flex justify-between items-center text-gray-900"
-                    >
-                        Existing Tags
-                        <svg
-                            class="h-6 w-6 text-indigo-600"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M4 6h16M4 10h16M4 14h16M4 18h16"
-                            />
-                        </svg>
-                    </h3>
-                </div>
-                <div class="px-6 py-5">
-                    <div
-                        class="shadow overflow-x-auto border border-gray-200 rounded-lg"
-                    >
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead>
-                                <tr>
-                                    <th
-                                        class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+    <div class="space-y-5">
+        <div class="flex justify-end items-center">
+            <span class="shadow-sm rounded-md">
+                <button
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
+                    @click="showNewTagModal = true"
+                >
+                    Create
+                </button>
+                <form @submit.prevent="createTag">
+                    <Modal :show.sync="showNewTagModal">
+                        <template #body>
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                    <svg
+                                        class="h-6 w-6 text-green-600"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
                                     >
-                                        Name
-                                    </th>
-                                    <th
-                                        class="w-1/6 px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                                        />
+                                    </svg>
+                                </div>
+                                <div
+                                    class="flex-grow mt-3 sm:mt-0 sm:ml-4 flex flex-col gap-y-4"
+                                >
+                                    <h3
+                                        id="modal-headline"
+                                        class="text-lg font-medium text-gray-900"
                                     >
-                                        Default
-                                    </th>
-                                    <th
-                                        class="w-1/6 px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                                    ></th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <template v-if="tags.length > 0">
-                                    <tr v-for="tag in tags" :key="tag.id">
-                                        <td
-                                            class="px-6 py-4 whitespace-no-wrap"
+                                        Create new tag
+                                    </h3>
+
+                                    <div class="space-y-4">
+                                        <input
+                                            id="name"
+                                            v-model="newTag.name"
+                                            class="form-input text-sm"
+                                            type="text"
+                                            placeholder="Name"
+                                        />
+
+                                        <div
+                                            class="flex items-center justify-between"
                                         >
-                                            {{ tag.name }}
-                                        </td>
-                                        <td
-                                            class="px-6 py-4 whitespace-no-wrap"
-                                        >
-                                            <Checkbox
-                                                :checked="tag.default"
-                                                @update:checked="toggleTag(tag)"
-                                            />
-                                        </td>
-                                        <td
-                                            class="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium"
-                                        >
-                                            <a
-                                                href="#"
-                                                class="text-red-600 hover:text-red-900"
-                                                @click="removeTag(tag)"
-                                                >Remove</a
-                                            >
-                                        </td>
-                                    </tr>
-                                </template>
-                                <template v-else>
-                                    <tr>
-                                        <td
-                                            class="text-center px-6 py-4 whitespace-no-wrap"
-                                            colspan="2"
-                                        >
-                                            No tags created
-                                        </td>
-                                    </tr>
-                                </template>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+                                            <div class="flex items-center">
+                                                <input
+                                                    id="default"
+                                                    v-model="newTag.default"
+                                                    type="checkbox"
+                                                    class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                                                />
+                                                <label
+                                                    for="default"
+                                                    class="ml-2 block text-sm text-gray-900"
+                                                >
+                                                    Default value
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <template #footer="{ hide }">
+                            <span
+                                class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto"
+                            >
+                                <button
+                                    type="submit"
+                                    class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-indigo-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                                    @click="hide"
+                                >
+                                    Save
+                                </button>
+                            </span>
+                            <span
+                                class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto"
+                            >
+                                <button
+                                    type="button"
+                                    class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                                    @click="hide"
+                                >
+                                    Cancel
+                                </button>
+                            </span>
+                        </template>
+                    </Modal>
+                </form>
+            </span>
         </div>
 
-        <div class="flex-initial w-80">
-            <form
-                class="bg-white border shadow overflow-hidden rounded-lg"
-                @submit.prevent="createTag"
-            >
-                <div class="px-6 py-5 border-b border-gray-200">
-                    <div
-                        class="text-lg leading-6 font-medium flex justify-between items-center text-gray-900"
-                    >
-                        Create New Tag
-                        <svg
-                            class="h-6 w-6 text-green-600"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                            />
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="px-5 py-4 space-y-4">
-                    <div class="space-y-1">
-                        <label
-                            class="block text-sm leading-5 font-medium text-gray-700"
-                            for="name"
+        <div
+            class="shadow overflow-x-auto border border-gray-200 rounded-lg lg:whitespace-no-wrap"
+        >
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead>
+                    <tr>
+                        <th
+                            class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                         >
                             Name
-                        </label>
-                        <input
-                            id="name"
-                            v-model="newTag.name"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            type="text"
-                        />
-                    </div>
-                    <div class="flex items-center">
-                        <label
-                            class="flex items-center justify-between space-x-4 font-bold cursor-pointer"
+                        </th>
+                        <th
+                            class="w-1/6 px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
                         >
-                            <Checkbox :checked.sync="newTag.default" />
-                            <span
-                                class="text-sm"
-                                :class="
-                                    newTag.default
-                                        ? 'text-green-500'
-                                        : 'text-gray-500'
-                                "
-                                @click="newTag.default = !newTag.default"
-                                >Default value</span
-                            >
-                        </label>
-                    </div>
-                    <button
-                        type="submit"
-                        class="w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-green-600 hover:bg-green-500 active:bg-green-700 transition duration-150 ease-in-out"
-                    >
-                        Create
-                    </button>
-                </div>
-            </form>
+                            Default
+                        </th>
+                        <th
+                            class="w-1/6 px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                        ></th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <template v-if="tags.length > 0">
+                        <tr v-for="tag in tags" :key="tag.id">
+                            <td class="px-6 py-4">
+                                {{ tag.name }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <Checkbox
+                                    :checked="tag.default"
+                                    @update:checked="toggleTag(tag)"
+                                />
+                            </td>
+                            <td class="px-6 py-4 text-sm leading-5 font-medium">
+                                <a
+                                    href="#"
+                                    class="text-red-600 hover:text-red-900"
+                                    @click="removeTag(tag)"
+                                    >Remove</a
+                                >
+                            </td>
+                        </tr>
+                    </template>
+                    <template v-else>
+                        <tr>
+                            <td class="text-center px-6 py-4" colspan="2">
+                                No tags created
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
 <script>
 import Layout from '@/Layouts/Layout';
 import Checkbox from '@/Shared/Checkbox';
+import Modal from '@/Shared/Modal';
 
 export default {
     layout: (h, page) => h(Layout, { props: { title: 'Tags' } }, [page]),
-    components: { Checkbox },
+    components: { Checkbox, Modal },
     props: {
         tags: {
             required: true,
@@ -178,6 +175,7 @@ export default {
                 Default: '1/4',
                 '': '1/4',
             },
+            showNewTagModal: false,
             newTag: {
                 name: '',
                 default: false,
@@ -207,12 +205,14 @@ export default {
         /**
          * Create a new tag.
          */
-        async createTag() {
-            await this.$inertia.post(route('tags.store'), this.newTag, {
+        createTag() {
+            this.$inertia.post(route('tags.store'), this.newTag, {
                 only: ['tags'],
                 preserveScroll: true,
+                onSuccess: () => {
+                    this.newTag.name = '';
+                },
             });
-            this.newTag.name = '';
         },
     },
 };

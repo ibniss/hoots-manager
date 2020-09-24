@@ -1,8 +1,16 @@
 import { InertiaApp } from '@inertiajs/inertia-vue';
 import Vue from 'vue';
 import VTooltip from 'v-tooltip';
-
+import { InertiaProgress } from '@inertiajs/progress';
+import defaultTheme from 'tailwindcss/defaultTheme';
 require('./bootstrap');
+
+InertiaProgress.init({
+    delay: 100,
+    color: defaultTheme.colors.indigo[400],
+    includeCSS: true,
+    showSpinner: false,
+});
 
 Vue.use(InertiaApp);
 Vue.use(VTooltip);
@@ -12,9 +20,9 @@ Vue.mixin({ methods: { route: window.route } });
 Vue.directive('click-outside', {
     bind(el, binding, vnode) {
         el.clickOutsideEvent = function (event) {
-            // here I check that click was outside the el and his children
+            // check that click was outside the el and his children
             if (!(el === event.target || el.contains(event.target))) {
-                // and if it did, call method provided in attribute value
+                // if it did, call method provided in attribute value
                 vnode.context[binding.expression](event);
             }
         };

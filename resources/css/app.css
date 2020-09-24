@@ -3,7 +3,6 @@
 
 /* Components */
 @import 'tailwindcss/components';
-@import 'nprogress';
 @import 'vtooltip';
 
 /* Utilities */
