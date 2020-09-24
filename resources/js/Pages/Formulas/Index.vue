@@ -1,171 +1,185 @@
 <template>
-    <div class="flex flex-wrap gap-6">
-        <div class="flex-1">
-            <div class="bg-white border shadow overflow-hidden rounded-lg">
-                <div class="px-6 py-5 border-b border-gray-200">
-                    <h3
-                        class="text-lg leading-6 font-medium flex justify-between items-center text-gray-900"
-                    >
-                        Existing Formulas
-                        <FontAwesomeIcon
-                            class="text-indigo-600"
-                            icon="list"
-                            size="lg"
-                        />
-                    </h3>
-                </div>
+    <div class="space-y-5">
+        <div class="flex justify-end items-center">
+            <span class="shadow-sm rounded-md">
+                <button
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
+                    @click="showNewFormulaModal = true"
+                >
+                    Create
+                </button>
+                <form @submit.prevent="createFormula">
+                    <Modal :show.sync="showNewFormulaModal">
+                        <template #body>
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                    <svg
+                                        class="h-6 w-6 text-green-600"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                                        />
+                                    </svg>
+                                </div>
+                                <div
+                                    class="flex-grow mt-3 sm:mt-0 sm:ml-4 flex flex-col gap-y-4"
+                                >
+                                    <h3
+                                        id="modal-headline"
+                                        class="text-lg font-medium text-gray-900"
+                                    >
+                                        Create new formula
+                                    </h3>
 
-                <div class="px-6 py-5">
-                    <div
-                        class="shadow overflow-hidden border border-gray-200 rounded-lg"
-                    >
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead>
-                                <tr>
-                                    <th
-                                        class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                                    <div
+                                        class="rounded-md bg-indigo-50 text-indigo-700 p-6 space-y-2"
                                     >
-                                        Name
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                                    >
-                                        Equation
-                                    </th>
-                                    <th
-                                        class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                                    ></th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <template v-if="formulas.length > 0">
-                                    <tr
-                                        v-for="formula in formulas"
-                                        :key="formula.id"
-                                    >
-                                        <td
-                                            class="px-6 py-4 whitespace-no-wrap"
-                                        >
-                                            {{ formula.name }}
-                                        </td>
-                                        <td
-                                            class="px-6 py-4 whitespace-no-wrap"
-                                        >
-                                            <pre>{{ formula.equation }}</pre>
-                                        </td>
-                                        <td
-                                            class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium"
-                                        >
-                                            <a
-                                                href="#"
-                                                class="text-red-600 hover:text-red-900"
-                                                @click="deleteFormula(formula)"
-                                                >Remove</a
+                                        <h4 class="font-semibold">
+                                            Available variables
+                                        </h4>
+
+                                        <div class="flex flex-wrap -m-1">
+                                            <template
+                                                v-for="variable in variables"
                                             >
-                                        </td>
-                                    </tr>
-                                </template>
-                                <template v-else>
-                                    <tr>
-                                        <td
-                                            class="text-center px-6 py-4 whitespace-no-wrap"
-                                            colspan="2"
+                                                <span
+                                                    :key="variable"
+                                                    class="inline-flex items-center px-2.5 py-0.5 m-1 bg-indigo-200 rounded-full font-mono font-medium text-xs"
+                                                >
+                                                    {{ variable }}
+                                                </span>
+                                            </template>
+                                        </div>
+
+                                        <p
+                                            class="text-indigo-500 italic text-sm"
                                         >
-                                            No formulas created
-                                        </td>
-                                    </tr>
-                                </template>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+                                            You can only use up to 5 in one
+                                            equation
+                                        </p>
+                                    </div>
+
+                                    <div class="space-y-4">
+                                        <input
+                                            id="name"
+                                            v-model="newFormula.name"
+                                            class="form-input text-sm"
+                                            type="text"
+                                            placeholder="Name"
+                                        />
+
+                                        <textarea
+                                            id="equation"
+                                            v-model="newFormula.equation"
+                                            class="form-textarea text-sm w-full"
+                                            placeholder="Equation"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <template #footer="{ hide }">
+                            <span
+                                class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto"
+                            >
+                                <button
+                                    type="submit"
+                                    class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-indigo-600 text-base font-medium text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm"
+                                    @click="hide"
+                                >
+                                    Save
+                                </button>
+                            </span>
+                            <span
+                                class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto"
+                            >
+                                <button
+                                    type="button"
+                                    class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm"
+                                    @click="hide"
+                                >
+                                    Cancel
+                                </button>
+                            </span>
+                        </template>
+                    </Modal>
+                </form>
+            </span>
         </div>
 
-        <div class="flex-initial w-80">
-            <form
-                class="bg-white border shadow overflow-hidden rounded-lg"
-                @submit.prevent="createFormula"
-            >
-                <div class="px-6 py-5 border-b border-gray-200">
-                    <h3
-                        class="text-lg leading-6 font-medium flex justify-between items-center text-gray-900"
-                    >
-                        Create New Formula
-                        <FontAwesomeIcon
-                            class="text-green-600"
-                            icon="plus"
-                            size="lg"
-                        />
-                    </h3>
-                </div>
-
-                <div class="px-5 py-4 space-y-4">
-                    <div
-                        class="rounded-md bg-indigo-50 text-indigo-700 p-6 space-y-2"
-                    >
-                        <h4 class="font-semibold">Available variables</h4>
-
-                        <div class="flex flex-wrap -m-1">
-                            <template v-for="variable in variables">
-                                <span
-                                    :key="variable"
-                                    class="inline-flex items-center px-2.5 py-0.5 m-1 bg-indigo-200 rounded-full font-mono font-medium text-xs leading-4"
-                                >
-                                    {{ variable }}
-                                </span>
-                            </template>
-                        </div>
-
-                        <p class="text-indigo-500 italic text-sm">
-                            You can only use up to 5 in one equation
-                        </p>
-                    </div>
-
-                    <div class="space-y-1">
-                        <label
-                            class="block text-sm leading-5 font-medium text-gray-700"
-                            for="name"
+        <div
+            class="shadow overflow-x-auto border border-gray-200 rounded-lg lg:whitespace-no-wrap"
+        >
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead>
+                    <tr>
+                        <th
+                            class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
                             Name
-                        </label>
-                        <input
-                            id="name"
-                            v-model="newFormula.name"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            type="text"
-                        />
-                    </div>
-                    <div class="space-y-1">
-                        <label
-                            class="block text-sm leading-5 font-medium text-gray-700"
-                            for="equation"
+                        </th>
+                        <th
+                            class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
                             Equation
-                        </label>
-                        <textarea
-                            id="equation"
-                            v-model="newFormula.equation"
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        class="w-full flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-green-600 hover:bg-green-500 active:bg-green-700 transition duration-150 ease-in-out"
-                    >
-                        Create
-                    </button>
-                </div>
-            </form>
+                        </th>
+                        <th
+                            class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        ></th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <template v-if="formulas.length > 0">
+                        <tr v-for="formula in formulas" :key="formula.id">
+                            <td class="px-6 py-4 whitespace-no-wrap">
+                                {{ formula.name }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-no-wrap">
+                                <pre>{{ formula.equation }}</pre>
+                            </td>
+                            <td
+                                class="px-6 py-4 whitespace-no-wrap text-right text-sm font-medium"
+                            >
+                                <a
+                                    href="#"
+                                    class="text-red-600 hover:text-red-900"
+                                    @click="deleteFormula(formula)"
+                                    >Remove</a
+                                >
+                            </td>
+                        </tr>
+                    </template>
+                    <template v-else>
+                        <tr>
+                            <td
+                                class="text-center px-6 py-4 whitespace-no-wrap"
+                                colspan="2"
+                            >
+                                No formulas created
+                            </td>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
 <script>
 import Layout from '@/Layouts/Layout';
+import Modal from '@/Shared/Modal';
 import { sentenceCase } from '@/Services/helpers';
 
 export default {
     layout: (h, page) => h(Layout, { props: { title: 'Formulas' } }, [page]),
+    components: { Modal },
     props: {
         formulas: {
             required: true,
@@ -183,6 +197,7 @@ export default {
                 Equation: '1/2',
                 '': '1/4',
             },
+            showNewFormulaModal: false,
             newFormula: {
                 name: '',
                 equation: '',
@@ -195,13 +210,15 @@ export default {
         /**
          * Create a new formula.
          */
-        async createFormula() {
-            await this.$inertia.post(route('formulas.store'), this.newFormula, {
+        createFormula() {
+            this.$inertia.post(route('formulas.store'), this.newFormula, {
                 only: ['formulas'],
                 preserveScroll: true,
+                onSuccess: () => {
+                    this.newFormula.name = '';
+                    this.newFormula.equation = '';
+                },
             });
-            this.newFormula.equation = '';
-            this.newFormula.equation = '';
         },
 
         /**
@@ -209,8 +226,8 @@ export default {
          *
          * @param {Object} formula
          */
-        async deleteFormula(formula) {
-            await this.$inertia.delete(route('formulas.delete', formula.id), {
+        deleteFormula(formula) {
+            this.$inertia.delete(route('formulas.delete', formula.id), {
                 only: ['formulas'],
                 preserveScroll: true,
             });

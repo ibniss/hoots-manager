@@ -1,137 +1,271 @@
 <template>
-    <div class="space-y-6">
-        <div class="flex justify-between items-center">
-            <div class="mt-1 relative rounded-md shadow-sm">
-                <div
-                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                >
-                    <FontAwesomeIcon class="text-gray-400" icon="search" />
-                </div>
-                <input
-                    id="price"
-                    v-model="query"
-                    class="form-input block w-full pl-10 pr-12 text-sm leading-5"
-                    placeholder="Search"
-                    type="text"
-                />
-            </div>
-            <div class="flex justify-end items-center space-x-4">
+    <div class="space-y-5">
+        <div class="flex justify-end md:justify-between items-center">
+            <div class="justify-start items-center gap-x-4 hidden md:flex">
                 <input
                     ref="playersCsv"
                     type="file"
                     class="hidden"
                     @change="uploadPlayers"
                 />
+                <ListBox
+                    id="perPageSelect"
+                    v-model="pagination.perPage"
+                    class="w-40"
+                    :options="pagination.perPageOptions"
+                    :label-resolver="option => `${option} per page`"
+                />
+                <ColumnsPicker
+                    id="columnPicker"
+                    :columns="allColumns"
+                    :hidden-columns.sync="hiddenColumns"
+                >
+                    <template #column="{ column }">
+                        <div
+                            class="w-full flex justify-between items-center gap-x-2"
+                        >
+                            <span>{{ column.name }}</span>
+                            <svg
+                                class="h-5 w-5"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                            >
+                                <!-- swap out the svg depending on the tag -->
+                                <template v-if="column.type === 'column'">
+                                    <path
+                                        d="M3 12v3c0 1.657 3.134 3 7 3s7-1.343 7-3v-3c0 1.657-3.134 3-7 3s-7-1.343-7-3z"
+                                    />
+                                    <path
+                                        d="M3 7v3c0 1.657 3.134 3 7 3s7-1.343 7-3V7c0 1.657-3.134 3-7 3S3 8.657 3 7z"
+                                    />
+                                    <path
+                                        d="M17 5c0 1.657-3.134 3-7 3S3 6.657 3 5s3.134-3 7-3 7 1.343 7 3z"
+                                    />
+                                </template>
+                                <path
+                                    v-if="column.type === 'tag'"
+                                    fill-rule="evenodd"
+                                    d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z"
+                                    clip-rule="evenodd"
+                                />
+                                <path
+                                    v-if="column.type === 'formula'"
+                                    fill-rule="evenodd"
+                                    d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm2 1a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zm4-4a1 1 0 100 2h.01a1 1 0 100-2H13zM9 9a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zM7 8a1 1 0 000 2h.01a1 1 0 000-2H7z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                        </div>
+                    </template>
+                </ColumnsPicker>
                 <span class="shadow-sm rounded-md">
                     <button
-                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
                         @click="$refs.playersCsv.click()"
                     >
-                        <FontAwesomeIcon class="mr-2" icon="upload" />
+                        <svg
+                            class="mr-2 h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
                         Upload
                     </button>
                 </span>
                 <span class="shadow-sm rounded-md">
                     <button
-                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:shadow-outline focus:border-red-300 active:bg-red-300 transition duration-150 ease-in-out"
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:shadow-outline focus:border-red-300 active:bg-red-300 transition duration-150 ease-in-out"
                         @click="deletePlayers"
                     >
-                        <FontAwesomeIcon class="mr-2" icon="trash-alt" />
+                        <svg
+                            class="mr-2 h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
                         Delete players
                     </button>
                 </span>
             </div>
+            <div class="w-full sm:w-auto flex justify-end items-center gap-x-4">
+                <div
+                    class="flex-grow sm:flex-grow-0 relative rounded-md shadow-sm"
+                >
+                    <div
+                        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                    >
+                        <svg
+                            class="text-gray-400 h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
+                    </div>
+                    <input
+                        id="price"
+                        v-model="query"
+                        class="form-input block w-full pl-10 pr-12 text-sm"
+                        placeholder="Search"
+                        type="text"
+                    />
+                </div>
+                <span class="shadow-sm rounded-md">
+                    <button
+                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
+                    >
+                        <!-- TODO: on click refresh standings from API -->
+                        <svg
+                            class="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
+                    </button>
+                </span>
+            </div>
         </div>
-        <div class="shadow overflow-hidden border border-gray-200 rounded-lg">
+        <div
+            class="shadow border border-gray-200 rounded-lg overflow-x-auto lg:whitespace-no-wrap"
+        >
             <table class="min-w-full divide-y divide-gray-200">
                 <thead>
                     <tr>
-                        <th
-                            v-for="col in allColumns"
-                            :key="col"
-                            :class="
-                                (sizes[col] ? sizes[col] : '') +
-                                (sortable.includes(col)
-                                    ? ' cursor-pointer'
-                                    : '')
-                            "
-                            class="px-5 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                            @click="sortable.includes(col) && sort(col)"
-                        >
-                            <div class="flex items-center justify-between">
-                                <span
-                                    class="inline-flex justify-between items-center space-x-0.5"
-                                >
-                                    <span>{{ col }}</span>
-                                    <FontAwesomeIcon
-                                        v-if="findFormula(col)"
-                                        v-tooltip="{
-                                            content: findFormula(col).equation,
-                                            classes: 'font-mono',
-                                        }"
-                                        icon="info-circle"
-                                    />
-                                </span>
-                                <template v-if="sortable.includes(col)">
-                                    <FontAwesomeIcon
-                                        v-if="sortBy.col === col"
-                                        class="float-right"
-                                        :icon="
-                                            sortBy.asc ? 'sort-up' : 'sort-down'
+                        <template v-for="column in allColumns">
+                            <th
+                                v-if="
+                                    !hiddenColumns.includes(
+                                        column.type + '-' + column.name
+                                    )
+                                "
+                                :key="`th-${column.type}-${column.name}`"
+                                :class="
+                                    sortable.includes(column.name)
+                                        ? ' cursor-pointer'
+                                        : ''
+                                "
+                                class="px-3 py-2 lg:px-4 lg:py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                @click="
+                                    sortable.includes(column.name) &&
+                                        sort(column.name)
+                                "
+                            >
+                                <div class="flex items-center justify-between">
+                                    <span
+                                        class="inline-flex justify-between items-center space-x-0.5"
+                                    >
+                                        <span>{{ column.name }}</span>
+                                        <svg
+                                            v-if="column.type === 'formula'"
+                                            v-tooltip="{
+                                                content: findFormula(
+                                                    column.name
+                                                ).equation,
+                                                classes: 'font-mono',
+                                                boundariesElement: pageContentElement,
+                                            }"
+                                            class="h-4 w-4"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
+                                        >
+                                            <path
+                                                fill-rule="evenodd"
+                                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                                clip-rule="evenodd"
+                                            />
+                                        </svg>
+                                    </span>
+                                    <SortControl
+                                        class="h-4 w-4 text-gray-400"
+                                        :sortable="
+                                            sortable.includes(column.name)
                                         "
+                                        :sorted="sortBy.col === column.name"
+                                        :ascending="sortBy.asc"
                                     />
-                                    <FontAwesomeIcon
-                                        v-else
-                                        class="float-right"
-                                        icon="sort"
-                                    />
-                                </template>
-                            </div>
-                        </th>
+                                </div>
+                            </th>
+                        </template>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="divide-y divide-gray-200">
                     <template v-if="filteredData.length > 0">
-                        <tr v-for="player in filteredData" :key="player.id">
-                            <td
-                                v-for="col in columns"
-                                :key="col"
-                                class="px-5 py-4 whitespace-no-wrap"
-                            >
-                                {{ player[col] }}
-                            </td>
-
-                            <td
-                                v-for="tag in tags"
-                                :key="tag.name"
-                                class="px-5 py-4 whitespace-no-wrap"
-                            >
-                                <Checkbox
-                                    :checked="player.tag_values[tag.name]"
-                                    @update:checked="
-                                        toggleTag(player, tag.name)
+                        <tr
+                            v-for="(player, i) in paginationData.forPage"
+                            :key="player.id"
+                            :class="i % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
+                        >
+                            <template v-for="col in columns">
+                                <td
+                                    v-if="
+                                        !hiddenColumns.includes('column-' + col)
                                     "
-                                />
-                            </td>
+                                    :key="`${player.id}-${col}-column`"
+                                    class="px-2 py-1 md:p-2 lg:p-3 xl:p-4 lg:whitespace-no-wrap text-sm"
+                                >
+                                    {{ player[col] }}
+                                </td>
+                            </template>
 
-                            <td
-                                v-for="formula in formulas"
-                                :key="formula.name"
-                                class="px-5 py-4 whitespace-no-wrap"
-                            >
-                                {{ player[formula.name] }}
-                            </td>
+                            <template v-for="tag in tags">
+                                <td
+                                    v-if="
+                                        !hiddenColumns.includes(
+                                            'tag-' + tag.name
+                                        )
+                                    "
+                                    :key="`${player.id}-${tag.name}-tag`"
+                                    class="px-2 py-1 md:p-2 lg:p-3 xl:p-4 lg:whitespace-no-wrap text-sm"
+                                >
+                                    <Checkbox
+                                        :checked="player.tag_values[tag.name]"
+                                        size="7"
+                                        @update:checked="
+                                            toggleTag(player, tag.name)
+                                        "
+                                    />
+                                </td>
+                            </template>
+
+                            <template v-for="formula in formulas">
+                                <td
+                                    v-if="
+                                        !hiddenColumns.includes(
+                                            'formula-' + formula.name
+                                        )
+                                    "
+                                    :key="`${player.id}-${formula.name}-formula`"
+                                    class="px-2 py-1 md:p-2 lg:p-3 xl:p-4 lg:whitespace-no-wrap text-sm"
+                                >
+                                    {{ player[formula.name] }}
+                                </td>
+                            </template>
                         </tr>
                     </template>
                     <template v-else>
                         <tr>
                             <td
-                                class="text-center px-5 py-4 whitespace-no-wrap"
-                                :colspan="
-                                    columns.length +
-                                    tags.length +
-                                    formulas.length
-                                "
+                                class="text-center px-2 py-1 md:p-2 lg:p-3 xl:p-4 text-sm"
+                                :colspan="allColumns.length"
                             >
                                 No players found
                             </td>
@@ -139,17 +273,35 @@
                     </template>
                 </tbody>
             </table>
+            <div class="border-t border-gray-200 p-3">
+                <Pagination
+                    :from="paginationData.from"
+                    :to="paginationData.to"
+                    :row-count="filteredData.length"
+                    :current-page.sync="pagination.currentPage"
+                    :max-pages="paginationData.pages"
+                />
+            </div>
         </div>
     </div>
 </template>
 <script>
 import Layout from '@/Layouts/Layout';
 import Checkbox from '@/Shared/Checkbox';
-import { sentenceCase } from '@/Services/helpers';
+import ListBox from '@/Shared/ListBox';
+import SortControl from '@/Shared/SortControl';
+import ColumnsPicker from '@/Shared/ColumnsPicker';
+import Pagination from '@/Shared/Pagination';
+import { sentenceCase, paginate } from '@/Services/helpers';
+
+const collator = new Intl.Collator(undefined, {
+    sensitivity: 'base',
+    numeric: true,
+});
 
 export default {
     layout: (h, page) => h(Layout, { props: { title: 'Players' } }, [page]),
-    components: { Checkbox },
+    components: { Checkbox, SortControl, ListBox, ColumnsPicker, Pagination },
     props: {
         columns: {
             required: true,
@@ -178,24 +330,37 @@ export default {
                 losses: 'w-28',
                 points: 'w-28',
             },
-            sortable: [
-                'deckcount',
-                'points',
-                'wins',
-                'losses',
-                'draws',
-                ...this.formulas.map(f => f.name),
-            ],
+            sortable: [...this.columns, ...this.formulas.map(f => f.name)],
             sortBy: {
                 col: 'points',
                 asc: false,
             },
+            pagination: {
+                perPage: 10,
+                perPageOptions: [10, 25, 50, 100],
+                currentPage: 1,
+            },
+            hiddenColumns: [],
             query: '',
+            pageContentElement: null,
         };
     },
     computed: {
         /**
-         * The table data with applied sorting.
+         * Get the pagination data.
+         *
+         * @returns {ReturnType<paginate>}
+         */
+        paginationData() {
+            return paginate(
+                this.filteredData,
+                this.pagination.currentPage,
+                this.pagination.perPage
+            );
+        },
+
+        /**
+         * The table data with applied filtering & sorting.
          *
          * @returns {Array}
          */
@@ -205,23 +370,30 @@ export default {
                     p.name.toLowerCase().includes(this.query.toLowerCase())
                 )
                 .sort((a, b) => {
-                    const comparison = a[this.sortBy.col] - b[this.sortBy.col];
+                    const comparison = collator.compare(
+                        a[this.sortBy.col],
+                        b[this.sortBy.col]
+                    );
                     return this.sortBy.asc ? comparison : -1 * comparison;
                 });
         },
 
         /**
-         * Get all table columns.
+         * Get all table columns as object of col: 'type'.
          *
-         * @returns {Array<String>}
+         * @returns {Array<{ name: string, type: string }>}
          */
         allColumns() {
             return [
-                ...this.columns,
-                ...this.tags.map(t => t.name),
-                ...this.formulas.map(f => f.name),
+                ...this.columns.map(col => ({ name: col, type: 'column' })),
+                ...this.tags.map(tag => ({ name: tag.name, type: 'tag' })),
+                ...this.formulas.map(f => ({ name: f.name, type: 'formula' })),
             ];
         },
+    },
+    mounted() {
+        // we need the right DOM target to allow tooltips to properly fill available space
+        this.pageContentElement = document.querySelector('#pageContent');
     },
     methods: {
         sentenceCase,

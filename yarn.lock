@@ -854,30 +854,6 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@fortawesome/fontawesome-common-types@^0.2.30":
-  version "0.2.30"
-  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-0.2.30.tgz#2f1cc5b46bd76723be41d0013a8450c9ba92b777"
-  integrity sha512-TsRwpTuKwFNiPhk1UfKgw7zNPeV5RhNp2Uw3pws+9gDAkPGKrtjR1y2lI3SYn7+YzyfuNknflpBA1LRKjt7hMg==
-
-"@fortawesome/fontawesome-svg-core@^1.2.30":
-  version "1.2.30"
-  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-1.2.30.tgz#f56dc6791861fe5d1af04fb8abddb94658c576db"
-  integrity sha512-E3sAXATKCSVnT17HYmZjjbcmwihrNOCkoU7dVMlasrcwiJAHxSKeZ+4WN5O+ElgO/FaYgJmASl8p9N7/B/RttA==
-  dependencies:
-    "@fortawesome/fontawesome-common-types" "^0.2.30"
-
-"@fortawesome/free-solid-svg-icons@^5.14.0":
-  version "5.14.0"
-  resolved "https://registry.yarnpkg.com/@fortawesome/free-solid-svg-icons/-/free-solid-svg-icons-5.14.0.tgz#970453f5e8c4915ad57856c3a0252ac63f6fec18"
-  integrity sha512-M933RDM8cecaKMWDSk3FRYdnzWGW7kBBlGNGfvqLVwcwhUPNj9gcw+xZMrqBdRqxnSXdl3zWzTCNNGEtFUq67Q==
-  dependencies:
-    "@fortawesome/fontawesome-common-types" "^0.2.30"
-
-"@fortawesome/vue-fontawesome@2":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@fortawesome/vue-fontawesome/-/vue-fontawesome-2.0.0.tgz#63da3e459147cebb0a8d58eed81d6071db9f5973"
-  integrity sha512-N3VKw7KzRfOm8hShUVldpinlm13HpvLBQgT63QS+aCrIRLwjoEUXY5Rcmttbfb6HkzZaeqjLqd/aZCQ53UjQpg==
-
 "@fullhuman/postcss-purgecss@^2.1.2":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@fullhuman/postcss-purgecss/-/postcss-purgecss-2.3.0.tgz#50a954757ec78696615d3e118e3fee2d9291882e"
@@ -887,16 +863,22 @@
     purgecss "^2.3.0"
 
 "@inertiajs/inertia-vue@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@inertiajs/inertia-vue/-/inertia-vue-0.2.3.tgz#93f048951623fb0aa4d820632ab96a05462a5cab"
-  integrity sha512-h1mX/A3Ou5afpvqkHDRwroeD4ZOkCjC0lsWlEbNIauNbyVYOQUFv7uCKOJRuI0+n5PUvMUKzoJq5IZ8hM4icTg==
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@inertiajs/inertia-vue/-/inertia-vue-0.2.4.tgz#187fd455ffd1105f759cc752bb242e68ac86a1e4"
+  integrity sha512-q5CfxAzNg12qsvI75h+bh5RlvKViNu7zmWbpnb6D0VUA2asbxjlJcMXpaMKXZt1U5fP6ti8NiTJgFy35vs2vOQ==
 
-"@inertiajs/inertia@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@inertiajs/inertia/-/inertia-0.2.3.tgz#c59ea7fd94a692ce897d3d63c8cbf098c21e1c9a"
-  integrity sha512-vCCsSRWLMzH6vDDdSBnSnQ8vopyBHdCK3X9BH+wIQWDwTqrIx/FgOcwA9MokiHTNdrOVZlN3s4cy+fppEh++pg==
+"@inertiajs/inertia@^0.3.0":
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/@inertiajs/inertia/-/inertia-0.3.3.tgz#7dbc4d6cf55a7160b93be71d42afaa7f16329493"
+  integrity sha512-KFEoPYW5BIuNYSScR3aNHx8Ud2fLIFl4e29XCHjS2l1Y7M3f7G0x0T1isLBtplMsG/2rYbSQRkdXoY6cZl7V0w==
   dependencies:
-    axios "^0.19.0"
+    axios "^0.19.0 || ^0.20.0"
+
+"@inertiajs/progress@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@inertiajs/progress/-/progress-0.1.1.tgz#c6239b32a6042f9949a58b3a85f6270082107302"
+  integrity sha512-ZrFnGBIGq0FUWglODYEZbj3kX1dttJOHdG9rKg6xdGzLo2c4B/xyvhlp0pGk9Oq7v/Wd8IDsRlF9nwP56iyk1Q==
+  dependencies:
     nprogress "^0.2.0"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
@@ -1438,12 +1420,19 @@ autoprefixer@^9.4.2, autoprefixer@^9.4.5:
     postcss "^7.0.32"
     postcss-value-parser "^4.1.0"
 
-axios@^0.19, axios@^0.19.0:
+axios@^0.19:
   version "0.19.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
   integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
   dependencies:
     follow-redirects "1.5.10"
+
+"axios@^0.19.0 || ^0.20.0":
+  version "0.20.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.20.0.tgz#057ba30f04884694993a8cd07fa394cff11c50bd"
+  integrity sha512-ANA4rr2BDcmmAQLOKft2fufrtuvlqR+cXNNinUmvfeSNCOF98PZL+7M/v1zIdGo7OLjEA9J2gXJL+j4zGsl0bA==
+  dependencies:
+    follow-redirects "^1.10.0"
 
 babel-code-frame@^6.26.0:
   version "6.26.0"
@@ -3519,7 +3508,7 @@ follow-redirects@1.5.10:
   dependencies:
     debug "=3.1.0"
 
-follow-redirects@^1.0.0:
+follow-redirects@^1.0.0, follow-redirects@^1.10.0:
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.0.tgz#b42e8d93a2a7eea5ed88633676d6597bc8e384db"
   integrity sha512-aq6gF1BEKje4a9i9+5jimNFIpq4Q1WiwBToeRK5NvZBd/TRsmW8BsJfOEGkr76TbOyPVD3OVDN910EcUNtRYEA==
