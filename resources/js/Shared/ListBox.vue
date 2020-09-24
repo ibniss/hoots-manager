@@ -3,7 +3,7 @@
         <label
             v-if="label"
             :id="id"
-            class="block text-sm leading-5 font-medium text-gray-700"
+            class="block text-sm font-medium text-gray-700"
         >
             {{ label }}
         </label>
@@ -14,7 +14,7 @@
                     aria-haspopup="listbox"
                     aria-expanded="true"
                     :aria-labelledby="id"
-                    class="cursor-default relative w-full rounded-md border border-gray-300 bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                    class="cursor-default relative w-full rounded-md border border-gray-300 bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm"
                     @click="showPopover = !showPopover"
                 >
                     <slot name="selectedOption" v-bind="{ value }">
@@ -53,7 +53,7 @@
                         tabindex="-1"
                         role="listbox"
                         :aria-labelledby="id"
-                        class="max-h-56 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto focus:outline-none sm:text-sm sm:leading-5"
+                        class="max-h-56 rounded-md py-1 text-base shadow-xs overflow-auto focus:outline-none sm:text-sm"
                     >
                         <template v-for="option in options">
                             <li

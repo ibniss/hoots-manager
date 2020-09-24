@@ -60,7 +60,7 @@
                 </ColumnsPicker>
                 <span class="shadow-sm rounded-md">
                     <button
-                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
                         @click="$refs.playersCsv.click()"
                     >
                         <svg
@@ -79,7 +79,7 @@
                 </span>
                 <span class="shadow-sm rounded-md">
                     <button
-                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:shadow-outline focus:border-red-300 active:bg-red-300 transition duration-150 ease-in-out"
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:shadow-outline focus:border-red-300 active:bg-red-300 transition duration-150 ease-in-out"
                         @click="deletePlayers"
                     >
                         <svg
@@ -119,14 +119,14 @@
                     <input
                         id="price"
                         v-model="query"
-                        class="form-input block w-full pl-10 pr-12 text-sm leading-5"
+                        class="form-input block w-full pl-10 pr-12 text-sm"
                         placeholder="Search"
                         type="text"
                     />
                 </div>
                 <span class="shadow-sm rounded-md">
                     <button
-                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
+                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
                     >
                         <!-- TODO: on click refresh standings from API -->
                         <svg

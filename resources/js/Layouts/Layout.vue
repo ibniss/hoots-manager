@@ -11,7 +11,7 @@
                     <div class="flex justify-end space-x-4">
                         <inertia-link
                             :href="route('players.index')"
-                            class="px-3 py-2 rounded-md text-sm font-medium leading-5 hover:text-white hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
+                            class="px-3 py-2 rounded-md text-sm font-medium hover:text-white hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
                             :class="
                                 isActive('players')
                                     ? 'text-indigo-100 bg-indigo-900'
@@ -22,7 +22,7 @@
                         </inertia-link>
                         <inertia-link
                             :href="route('tags.index')"
-                            class="px-3 py-2 rounded-md text-sm font-medium leading-5 hover:text-white hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
+                            class="px-3 py-2 rounded-md text-sm font-medium hover:text-white hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
                             :class="
                                 isActive('tags')
                                     ? 'text-indigo-100 bg-indigo-900'
@@ -33,7 +33,7 @@
                         </inertia-link>
                         <inertia-link
                             :href="route('formulas.index')"
-                            class="px-3 py-2 rounded-md text-sm font-medium leading-5 hover:text-white hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
+                            class="px-3 py-2 rounded-md text-sm font-medium hover:text-white hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
                             :class="
                                 isActive('formulas')
                                     ? 'text-indigo-100 bg-indigo-900'

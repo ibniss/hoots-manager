@@ -52,7 +52,7 @@
                                             >
                                                 <span
                                                     :key="variable"
-                                                    class="inline-flex items-center px-2.5 py-0.5 m-1 bg-indigo-200 rounded-full font-mono font-medium text-xs leading-4"
+                                                    class="inline-flex items-center px-2.5 py-0.5 m-1 bg-indigo-200 rounded-full font-mono font-medium text-xs"
                                                 >
                                                     {{ variable }}
                                                 </span>
@@ -92,7 +92,7 @@
                             >
                                 <button
                                     type="submit"
-                                    class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-indigo-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                                    class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-indigo-600 text-base font-medium text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm"
                                     @click="hide"
                                 >
                                     Save
@@ -103,7 +103,7 @@
                             >
                                 <button
                                     type="button"
-                                    class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+                                    class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm"
                                     @click="hide"
                                 >
                                     Cancel
@@ -122,17 +122,17 @@
                 <thead>
                     <tr>
                         <th
-                            class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                            class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
                             Name
                         </th>
                         <th
-                            class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                            class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
                             Equation
                         </th>
                         <th
-                            class="px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider"
+                            class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         ></th>
                     </tr>
                 </thead>
@@ -146,7 +146,7 @@
                                 <pre>{{ formula.equation }}</pre>
                             </td>
                             <td
-                                class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium"
+                                class="px-6 py-4 whitespace-no-wrap text-right text-sm font-medium"
                             >
                                 <a
                                     href="#"
