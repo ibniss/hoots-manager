@@ -49,7 +49,9 @@ class PlayerController extends Controller
           })->merge($player->tag_values)->toArray();
 
           foreach ($formulas as $formula) {
+            $result = $this->math->evaluate($formula->equation, $variables);
             $player->{$formula->name} = $this->math->evaluate($formula->equation, $variables);
+            $variables[$formula->name] = $result;
           }
           return $player;
         });

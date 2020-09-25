@@ -36,5 +36,6 @@ Route::name('tags.')->group(function () {
 Route::name('formulas.')->group(function () {
   Route::get('/formulas', [FormulaController::class, 'index'])->name('index');
   Route::post('/formulas', [FormulaController::class, 'store'])->name('store');
+  Route::put('/formulas/{formula}/move', [FormulaController::class, 'move'])->name('move');
   Route::delete('/formulas/{formula}', [FormulaController::class, 'delete'])->name('delete');
 });

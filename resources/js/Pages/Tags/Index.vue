@@ -111,12 +111,12 @@
                             Name
                         </th>
                         <th
-                            class="w-1/6 px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            class="w-1/12 px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
                             Default
                         </th>
                         <th
-                            class="w-1/6 px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            class="w-1/12 px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         ></th>
                     </tr>
                 </thead>
@@ -132,7 +132,9 @@
                                     @update:checked="toggleTag(tag)"
                                 />
                             </td>
-                            <td class="px-6 py-4 text-sm font-medium">
+                            <td
+                                class="px-6 py-4 text-right text-sm font-medium"
+                            >
                                 <a
                                     href="#"
                                     class="text-red-600 hover:text-red-900"
@@ -144,7 +146,7 @@
                     </template>
                     <template v-else>
                         <tr>
-                            <td class="text-center px-6 py-4" colspan="2">
+                            <td class="text-center px-6 py-4" colspan="3">
                                 No tags created
                             </td>
                         </tr>
