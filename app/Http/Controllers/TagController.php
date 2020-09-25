@@ -32,8 +32,14 @@ class TagController extends Controller
    */
   public function store(Request $request)
   {
-    Tag::create($request->only(['name', 'default']));
-    return Redirect::route('tags.index');
+    $validatedData = $request->validate([
+      'name' => ['required', 'string'],
+      'default' => ['required', 'boolean']
+    ]);
+
+    Tag::create($validatedData);
+    return Redirect::route('tags.index')
+      ->with('success', "Tag '{$request->input('name')}' created successfully.");
   }
 
   /**
@@ -50,7 +56,8 @@ class TagController extends Controller
     // update all player_tag values to remove unnecessary lines
     PlayerTag::where('tag_id', $tag->id)->where('value', $tag->default)->delete();
 
-    return Redirect::route('tags.index');
+    return Redirect::route('tags.index')
+      ->with('success', "Tag '{$tag->name}' updated successfully.");
   }
 
   /**
@@ -64,6 +71,7 @@ class TagController extends Controller
     $tag->delete();
 
     PlayerTag::where('tag_id', $tag->id)->delete();
-    return Redirect::route('tags.index');
+    return Redirect::route('tags.index')
+      ->with('success', "Tag '{$tag->name}' deleted successfully.");
   }
 }

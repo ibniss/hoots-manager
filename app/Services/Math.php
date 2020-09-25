@@ -20,7 +20,7 @@ class Math
    *
    * @param string $equation
    * @param array $variables
-   * @return string
+   * @return float|string
    */
   function evaluate(string $equation, array $variables)
   {

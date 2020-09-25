@@ -192,14 +192,12 @@ export default {
          */
         toggleTag(tag) {
             this.$inertia.put(route('tags.update', tag.id), {
-                only: ['tags'],
                 preserveScroll: true,
             });
         },
 
         removeTag(tag) {
             this.$inertia.delete(route('tags.delete', tag.id), {
-                only: ['tags'],
                 preserveScroll: true,
             });
         },
@@ -209,10 +207,10 @@ export default {
          */
         createTag() {
             this.$inertia.post(route('tags.store'), this.newTag, {
-                only: ['tags'],
                 preserveScroll: true,
                 onSuccess: () => {
                     this.newTag.name = '';
+                    this.newTag.default = false;
                 },
             });
         },
