@@ -15,6 +15,7 @@ The application is in a very early development stage. The currently supported fe
 ## The stack
 
 -   [Laravel](https://laravel.com/)
+-   [Pest](https://pestphp.com/)
 -   [Vue.js](https://vuejs.org/)
 -   [Inertia.js](https://inertiajs.com/)
 -   [tailwindcss](https://tailwindcss.com/)

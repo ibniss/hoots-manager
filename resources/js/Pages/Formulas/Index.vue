@@ -1,7 +1,17 @@
 <template>
     <div class="space-y-5">
-        <div class="flex justify-end items-center">
-            <span class="shadow-sm rounded-md">
+        <div
+            class="flex flex-wrap justify-end lg:justify-between items-center gap-4"
+        >
+            <div
+                class="w-full lg:w-auto shadow rounded-md bg-indigo-50 text-indigo-700 p-6"
+            >
+                <p class="font-medium text-sm">
+                    Equations are evaluated in order - you can use equation
+                    results as variables in succeeding equations
+                </p>
+            </div>
+            <div class="shadow-sm rounded-md">
                 <button
                     class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
                     @click="showNewFormulaModal = true"
@@ -58,13 +68,6 @@
                                                 </span>
                                             </template>
                                         </div>
-
-                                        <p
-                                            class="text-indigo-500 italic text-sm"
-                                        >
-                                            You can only use up to 5 in one
-                                            equation
-                                        </p>
                                     </div>
 
                                     <div class="space-y-4">
@@ -112,7 +115,7 @@
                         </template>
                     </Modal>
                 </form>
-            </span>
+            </div>
         </div>
 
         <div
@@ -132,37 +135,54 @@
                             Equation
                         </th>
                         <th
-                            class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                            class="w-1/12 px-6 py-3 bg-gray-50 text-left text-xs"
+                        ></th>
+                        <th
+                            class="w-1/12 px-6 py-3 bg-gray-50 text-left text-xs"
+                        ></th>
+                        <th
+                            class="w-1/12 px-6 py-3 bg-gray-50 text-left text-xs"
                         ></th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <template v-if="formulas.length > 0">
                         <tr v-for="formula in formulas" :key="formula.id">
-                            <td class="px-6 py-4 whitespace-no-wrap">
+                            <td class="px-6 py-4">
                                 {{ formula.name }}
                             </td>
-                            <td class="px-6 py-4 whitespace-no-wrap">
+                            <td class="px-6 py-4">
                                 <pre>{{ formula.equation }}</pre>
                             </td>
-                            <td
-                                class="px-6 py-4 whitespace-no-wrap text-right text-sm font-medium"
-                            >
-                                <a
-                                    href="#"
-                                    class="text-red-600 hover:text-red-900"
-                                    @click="deleteFormula(formula)"
-                                    >Remove</a
+                            <td class="px-6 py-4 text-right text-sm">
+                                <button
+                                    class="font-medium text-indigo-600 hover:text-indigo-900 focus:outline-none"
+                                    @click="moveFormula(formula, 'up')"
                                 >
+                                    Up
+                                </button>
+                            </td>
+                            <td class="px-6 py-4 text-right text-sm">
+                                <button
+                                    class="font-medium text-indigo-600 hover:text-indigo-900 focus:outline-none"
+                                    @click="moveFormula(formula, 'down')"
+                                >
+                                    Down
+                                </button>
+                            </td>
+                            <td class="px-6 py-4 text-right text-sm">
+                                <button
+                                    class="font-medium text-red-600 hover:text-red-900 focus:outline-none"
+                                    @click="deleteFormula(formula)"
+                                >
+                                    Remove
+                                </button>
                             </td>
                         </tr>
                     </template>
                     <template v-else>
                         <tr>
-                            <td
-                                class="text-center px-6 py-4 whitespace-no-wrap"
-                                colspan="2"
-                            >
+                            <td class="text-center px-6 py-4" colspan="3">
                                 No formulas created
                             </td>
                         </tr>
@@ -212,7 +232,6 @@ export default {
          */
         createFormula() {
             this.$inertia.post(route('formulas.store'), this.newFormula, {
-                only: ['formulas'],
                 preserveScroll: true,
                 onSuccess: () => {
                     this.newFormula.name = '';
@@ -222,13 +241,28 @@ export default {
         },
 
         /**
+         * Move a given formula in a given direction.
+         *
+         * @param {Object} formula
+         * @param {String} direction
+         */
+        moveFormula(formula, direction) {
+            this.$inertia.put(
+                route('formulas.move', formula),
+                { direction },
+                {
+                    preserveScroll: true,
+                }
+            );
+        },
+
+        /**
          * Delete a given formula.
          *
          * @param {Object} formula
          */
         deleteFormula(formula) {
             this.$inertia.delete(route('formulas.delete', formula.id), {
-                only: ['formulas'],
                 preserveScroll: true,
             });
         },

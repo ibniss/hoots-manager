@@ -273,7 +273,10 @@
                     </template>
                 </tbody>
             </table>
-            <div class="border-t border-gray-200 p-3">
+            <div
+                v-if="filteredData.length > 0"
+                class="border-t border-gray-200 p-3"
+            >
                 <Pagination
                     :from="paginationData.from"
                     :to="paginationData.to"

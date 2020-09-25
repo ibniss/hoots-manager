@@ -17,6 +17,7 @@ class CreateFormulasTable extends Migration
       $table->id();
       $table->string('name');
       $table->string('equation');
+      $table->integer('order');
       $table->timestamps();
     });
   }
