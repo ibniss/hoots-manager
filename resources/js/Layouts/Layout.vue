@@ -45,7 +45,7 @@
                     </div>
                 </nav>
             </div>
-            <header class="py-8 px-4 sm:px-6 lg:px-8 pb-44">
+            <header class="py-12 px-4 sm:px-6 lg:px-8 pb-44">
                 <h1 class="text-3xl font-bold leading-tight text-indigo-100">
                     {{ title }}
                 </h1>
@@ -55,6 +55,7 @@
             <div id="pageContent" class="rounded-lg shadow-lg">
                 <div class="rounded-lg shadow-xs overflow-hidden">
                     <div class="bg-white p-8">
+                        <FlashMessages class="mb-4" />
                         <slot />
                     </div>
                 </div>
@@ -62,9 +63,11 @@
         </main>
     </div>
 </template>
-
 <script>
+import FlashMessages from '@/Shared/FlashMessages';
+
 export default {
+    components: { FlashMessages },
     props: {
         title: {
             required: true,

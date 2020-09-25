@@ -31,7 +31,7 @@ class PlayerController extends Controller
    */
   public function index()
   {
-    $formulas = Formula::all();
+    $formulas = Formula::orderBy('order')->get();
 
     return Inertia::render('Players/Index', [
       'columns' => ['name', 'decklist', 'deckcount', 'wins', 'draws', 'losses', 'points'],
