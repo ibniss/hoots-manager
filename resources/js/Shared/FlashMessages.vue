@@ -123,7 +123,7 @@ export default {
         '$page.flash': {
             handler() {
                 this.show = true;
-                // setTimeout(() => (this.show = false), 2000);
+                setTimeout(() => (this.show = false), 2000);
             },
             deep: true,
         },
