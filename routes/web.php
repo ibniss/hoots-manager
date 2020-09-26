@@ -3,6 +3,7 @@
 use App\Http\Controllers\FormulaController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerTagController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,4 +39,9 @@ Route::name('formulas.')->group(function () {
   Route::post('/formulas', [FormulaController::class, 'store'])->name('store');
   Route::put('/formulas/{formula}/move', [FormulaController::class, 'move'])->name('move');
   Route::delete('/formulas/{formula}', [FormulaController::class, 'delete'])->name('delete');
+});
+
+Route::name('settings.')->group(function () {
+  Route::get('/settings', [SettingController::class, 'index'])->name('index');
+  Route::put('/settings', [SettingController::class, 'update'])->name('update');
 });

@@ -7,28 +7,24 @@
         >
             <div
                 v-if="$page.flash.success && show"
-                class="relative shadow rounded-md bg-green-100 text-green-700 text-sm p-4 w-full cursor-pointer"
+                class="group relative flex items-start space-x-4 shadow rounded-md bg-green-100 text-green-700 text-sm p-4 w-full cursor-pointer"
                 @click="show = false"
             >
-                <div
-                    class="absolute left-0 top-0 pt-6 ml-3 flex items-center justify-center h-6 w-6"
+                <svg
+                    class="mx-auto flex-shrink-0 -mt-0.5 h-6 w-6 text-green-400"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
                 >
-                    <svg
-                        class="h-6 w-6 text-green-400"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                    >
-                        <path
-                            fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
-                </div>
-                <span class="ml-8 font-semibold">
+                    <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd"
+                    />
+                </svg>
+                <span class="flex-grow font-semibold">
                     {{ $page.flash.success }}
                 </span>
-                <div class="absolute top-0 right-0 pt-4 pr-4">
+                <div class="absolute top-0 right-0 pt-3.5 pr-4">
                     <button
                         type="button"
                         class="inline-flex items-center rounded-md text-green-400 group-hover:text-green-500 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
@@ -55,11 +51,11 @@
                         Object.keys($page.errors).length > 0) &&
                     show
                 "
-                class="group relative shadow rounded-md bg-red-100 text-red-700 text-sm p-4 w-full cursor-pointer"
+                class="group relative flex items-start space-x-4 shadow rounded-md bg-red-100 text-red-700 text-sm p-4 w-full cursor-pointer"
                 @click="show = false"
             >
                 <svg
-                    class="absolute top-3 left-3 h-6 w-6 text-red-400"
+                    class="mx-auto flex-shrink-0 -mt-0.5 h-6 w-6 text-red-400"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                 >
@@ -69,10 +65,10 @@
                         clip-rule="evenodd"
                     />
                 </svg>
-                <div v-if="$page.flash.error" class="mx-8 font-semibold">
+                <div v-if="$page.flash.error" class="flex-grow font-semibold">
                     {{ $page.flash.error }}
                 </div>
-                <div v-else class="mx-8">
+                <div v-else class="flex-grow mx-8">
                     <span
                         v-if="Object.keys($page.errors).length === 1"
                         class="font-semibold"
@@ -92,7 +88,7 @@
                         </ul>
                     </span>
                 </div>
-                <div class="absolute top-0 right-0 pt-4 pr-4">
+                <div class="absolute top-0 right-0 pt-3.5 pr-4">
                     <button
                         type="button"
                         class="inline-flex items-center rounded-md text-red-400 group-hover:text-red-500 focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
@@ -127,7 +123,7 @@ export default {
         '$page.flash': {
             handler() {
                 this.show = true;
-                setTimeout(() => (this.show = false), 2000);
+                // setTimeout(() => (this.show = false), 2000);
             },
             deep: true,
         },
