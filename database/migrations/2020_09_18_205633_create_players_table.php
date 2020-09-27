@@ -15,13 +15,14 @@ class CreatePlayersTable extends Migration
   {
     Schema::create('players', function (Blueprint $table) {
       $table->id();
-      $table->string('name');
-      $table->string('decklist');
-      $table->integer('deckcount')->nullable();
-      $table->integer('wins');
-      $table->integer('draws');
-      $table->integer('losses');
-      $table->integer('points');
+      $table->string('first_name')->nullable();
+      $table->string('last_name')->nullable();
+      $table->string('username')->nullable();
+      $table->string('screen_name')->nullable();
+      $table->string('discord_username')->nullable();
+      $table->string('player_name')->nullable();
+      $table->unsignedBigInteger('decklist_id')->nullable();
+      $table->string('decklist_name')->nullable();
       $table->timestamps();
     });
   }
@@ -33,6 +34,6 @@ class CreatePlayersTable extends Migration
    */
   public function down()
   {
-    Schema::dropIfExists('users');
+    Schema::dropIfExists('players');
   }
 }

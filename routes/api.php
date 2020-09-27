@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MeleeApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::name('api.')->group(function () {
+  Route::name('refresh.')->prefix('refresh')->group(function () {
+    Route::post('players', [MeleeApiController::class, 'players'])->name('players');
+    Route::post('standings', [MeleeApiController::class, 'standings'])->name('standings');
+  });
 });

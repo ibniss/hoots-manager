@@ -22,7 +22,6 @@ Route::redirect('/', '/players');
 
 Route::name('players.')->group(function () {
   Route::get('/players', [PlayerController::class, 'index'])->name('index');
-  Route::post('/players', [PlayerController::class, 'store'])->name('store');
   Route::delete('/players', [PlayerController::class, 'delete'])->name('delete');
   Route::put('/players/{player}/tags/{name}', [PlayerTagController::class, 'update'])->name('tags.update');
 });

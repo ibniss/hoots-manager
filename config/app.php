@@ -236,5 +236,6 @@ Round [[round_num]] Feature Matches:
 [[pairings]]
 Please wait to begin until we tell you to.
 @OpenParticipant if you are not a feature, you can begin your match!
-EOT)
+EOT),
+  'melee_base_url' => env('MELEE_BASE_URL', 'https://mtgmelee.com')
 ];

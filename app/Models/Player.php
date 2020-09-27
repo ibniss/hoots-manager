@@ -52,6 +52,28 @@ class Player extends Model
     return $this->belongsToMany(Tag::class)->using(PlayerTag::class)->withPivot(['value']);
   }
 
+  public function standing()
+  {
+    return $this->hasOne(Standing::class);
+  }
+
+  public function decklist()
+  {
+    return $this->hasOne(Decklist::class);
+  }
+
+  /**
+   * Get the player full name.
+   *
+   * @return string
+   */
+  public function getFullNameAttribute()
+  {
+    $firstName = trim($this->first_name);
+    $lastName = trim($this->last_name);
+    return trim("{$firstName} {$lastName}");
+  }
+
   /**
    * Get values for extra tags for the player.
    *
