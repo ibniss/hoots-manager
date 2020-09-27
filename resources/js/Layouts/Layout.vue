@@ -9,39 +9,20 @@
                         HOOTS Manager
                     </h2>
                     <div class="flex justify-end space-x-4">
-                        <inertia-link
-                            :href="route('players.index')"
-                            class="px-3 py-2 rounded-md text-sm font-medium hover:text-white hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
-                            :class="
-                                isActive('players')
-                                    ? 'text-indigo-100 bg-indigo-900'
-                                    : 'text-indigo-300'
-                            "
-                        >
-                            Players
-                        </inertia-link>
-                        <inertia-link
-                            :href="route('tags.index')"
-                            class="px-3 py-2 rounded-md text-sm font-medium hover:text-white hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
-                            :class="
-                                isActive('tags')
-                                    ? 'text-indigo-100 bg-indigo-900'
-                                    : 'text-indigo-300'
-                            "
-                        >
-                            Tags
-                        </inertia-link>
-                        <inertia-link
-                            :href="route('formulas.index')"
-                            class="px-3 py-2 rounded-md text-sm font-medium hover:text-white hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
-                            :class="
-                                isActive('formulas')
-                                    ? 'text-indigo-100 bg-indigo-900'
-                                    : 'text-indigo-300'
-                            "
-                        >
-                            Formulas
-                        </inertia-link>
+                        <template v-for="link in menu">
+                            <inertia-link
+                                :key="link.name"
+                                :href="link.url"
+                                class="px-3 py-2 rounded-md text-sm font-medium hover:text-white hover:bg-indigo-700 focus:outline-none transition duration-150 ease-in-out"
+                                :class="
+                                    isActive(link.activePart)
+                                        ? 'text-indigo-100 bg-indigo-900'
+                                        : 'text-indigo-300'
+                                "
+                            >
+                                {{ link.name }}
+                            </inertia-link>
+                        </template>
                     </div>
                 </nav>
             </div>
@@ -73,6 +54,32 @@ export default {
             required: true,
             type: String,
         },
+    },
+    data() {
+        return {
+            menu: [
+                {
+                    name: 'Players',
+                    url: route('players.index'),
+                    activePart: 'players',
+                },
+                {
+                    name: 'Tags',
+                    url: route('tags.index'),
+                    activePart: 'tags',
+                },
+                {
+                    name: 'Formulas',
+                    url: route('formulas.index'),
+                    activePart: 'formulas',
+                },
+                {
+                    name: 'Settings',
+                    url: route('settings.index'),
+                    activePart: 'settings',
+                },
+            ],
+        };
     },
     methods: {
         /**

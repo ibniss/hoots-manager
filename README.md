@@ -69,7 +69,7 @@ touch database/database.sqlite
 Run database migrations:
 
 ```sh
-php artisan migrate
+php artisan migrate --seed
 ```
 
 Run the dev server (the output will give the address):
