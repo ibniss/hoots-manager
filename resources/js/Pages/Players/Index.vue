@@ -421,8 +421,19 @@ export default {
         /**
          * Refresh the standings from the API, then refresh table.
          */
-        refreshStandings() {
-            this.$inertia.post(route('api.refresh.standings'));
+        async refreshStandings() {
+            try {
+                const response = await axios.post(
+                    route('api.refresh.standings')
+                );
+                this.$inertia.reload({
+                    onSuccess: () =>
+                        this.$root.$emit('success', response?.data?.success),
+                });
+            } catch (error) {
+                const err = error?.response?.data ?? error.message;
+                this.$root.$emit('error', Array.isArray(err) ? err : [err]);
+            }
         },
     },
 };

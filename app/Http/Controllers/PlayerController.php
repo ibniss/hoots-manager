@@ -72,16 +72,4 @@ class PlayerController extends Controller
       })
     ]);
   }
-
-  /**
-   * Wipe all player data.
-   *
-   * @return \Illuminate\Http\RedirectResponse
-   */
-  public function delete()
-  {
-    Player::truncate();
-    PlayerTag::truncate();
-    return Redirect::route('players.index');
-  }
 }

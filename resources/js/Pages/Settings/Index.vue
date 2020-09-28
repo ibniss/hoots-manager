@@ -81,14 +81,14 @@
                 <div class="space-y-2 py-2 text-sm font-medium text-gray-600">
                     <h4>Refresh player data</h4>
                     <p class="text-xs font-normal text-gray-500">
-                        Warning: this will wipe player tags and attempt to
-                        re-fetch players from MTGMelee
+                        Warning: this will wipe players and associated tags and
+                        attempt to re-fetch players from MTGMelee
                     </p>
                 </div>
                 <span class="shadow-sm rounded-md">
                     <button
                         class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:shadow-outline focus:border-red-300 active:bg-red-300 transition duration-150 ease-in-out"
-                        @click="deletePlayers"
+                        @click="resetPlayers"
                     >
                         <svg
                             class="h-5 w-5 mr-2"
@@ -142,8 +142,14 @@ export default {
         /**
          * Wipe and re-fetch players data from API.
          */
-        deletePlayers() {
-            this.$inertia.delete(route('players.delete'));
+        async resetPlayers() {
+            try {
+                const response = await axios.post(route('api.refresh.players'));
+                this.$root.$emit('success', response?.data?.success);
+            } catch (error) {
+                const err = error?.response?.data ?? error.message;
+                this.$root.$emit('error', Array.isArray(err) ? err : [err]);
+            }
         },
     },
 };

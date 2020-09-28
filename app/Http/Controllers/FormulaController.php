@@ -105,7 +105,8 @@ class FormulaController extends Controller
     }
 
 
-    return Redirect::route('formulas.index');
+    return Redirect::route('formulas.index')
+      ->with('success', "Formula '{$formula->name}' updated successfully.");
   }
 
   /**
