@@ -22,10 +22,16 @@ class FormulaController extends Controller
     return Inertia::render('Formulas/Index', [
       'formulas' => fn () => Formula::orderBy('order')->get(),
       'variables' => function () {
-        $except = ['id', 'decklist', 'name', 'created_at', 'updated_at'];
-        return collect(Schema::getColumnListing('players'))->merge(Tag::all()->pluck('name'))->filter(function ($var) use ($except) {
-          return !in_array($var, $except);
-        })->values();
+        $except = ['id', 'decklist_id', 'player_id', 'decklist_name', 'player_name', 'first_name', 'last_name', 'screen_name', 'discord_username', 'username', 'created_at', 'updated_at'];
+        $playerColumns = Schema::getColumnListing('players');
+        $standingColumns = Schema::getColumnListing('standings');
+        return collect($playerColumns)
+          ->merge($standingColumns)
+          ->merge(Tag::all()->pluck('name'))->filter(function ($var) use ($except) {
+            return !in_array($var, $except);
+          })
+          ->merge(['decklist_count']) // decklist count is computed on load
+          ->values();
       }
     ]);
   }
@@ -99,7 +105,8 @@ class FormulaController extends Controller
     }
 
 
-    return Redirect::route('formulas.index');
+    return Redirect::route('formulas.index')
+      ->with('success', "Formula '{$formula->name}' updated successfully.");
   }
 
   /**

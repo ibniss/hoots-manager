@@ -1,13 +1,7 @@
 <template>
     <div class="space-y-5">
-        <div class="flex justify-end md:justify-between items-center">
+        <div class="flex justify-end md:justify-between items-center gap-x-4">
             <div class="justify-start items-center gap-x-4 hidden md:flex">
-                <input
-                    ref="playersCsv"
-                    type="file"
-                    class="hidden"
-                    @change="uploadPlayers"
-                />
                 <ListBox
                     id="perPageSelect"
                     v-model="pagination.perPage"
@@ -24,7 +18,13 @@
                         <div
                             class="w-full flex justify-between items-center gap-x-2"
                         >
-                            <span>{{ column.name }}</span>
+                            <span>
+                                {{
+                                    column.name in headings
+                                        ? headings[column.name]
+                                        : column.name
+                                }}
+                            </span>
                             <svg
                                 class="h-5 w-5"
                                 viewBox="0 0 20 20"
@@ -58,44 +58,6 @@
                         </div>
                     </template>
                 </ColumnsPicker>
-                <span class="shadow-sm rounded-md">
-                    <button
-                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
-                        @click="$refs.playersCsv.click()"
-                    >
-                        <svg
-                            class="mr-2 h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
-                        Upload
-                    </button>
-                </span>
-                <span class="shadow-sm rounded-md">
-                    <button
-                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:shadow-outline focus:border-red-300 active:bg-red-300 transition duration-150 ease-in-out"
-                        @click="deletePlayers"
-                    >
-                        <svg
-                            class="mr-2 h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
-                        Delete players
-                    </button>
-                </span>
             </div>
             <div class="w-full sm:w-auto flex justify-end items-center gap-x-4">
                 <div
@@ -127,8 +89,8 @@
                 <span class="shadow-sm rounded-md">
                     <button
                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
+                        @click="refreshStandings"
                     >
-                        <!-- TODO: on click refresh standings from API -->
                         <svg
                             class="h-5 w-5"
                             viewBox="0 0 20 20"
@@ -173,7 +135,13 @@
                                     <span
                                         class="inline-flex justify-between items-center space-x-0.5"
                                     >
-                                        <span>{{ column.name }}</span>
+                                        <span>
+                                            {{
+                                                column.name in headings
+                                                    ? headings[column.name]
+                                                    : column.name
+                                            }}
+                                        </span>
                                         <svg
                                             v-if="column.type === 'formula'"
                                             v-tooltip="{
@@ -325,18 +293,26 @@ export default {
     },
     data() {
         return {
+            headings: {
+                full_name: 'name',
+                decklist_name: 'decklist',
+                decklist_count: 'deckcount',
+                match_wins: 'wins',
+                match_draws: 'draws',
+                match_losses: 'losses',
+            },
             sizes: {
-                name: 'w-44',
-                deckcount: 'w-36',
-                wins: 'w-28',
-                draws: 'w-28',
-                losses: 'w-28',
+                full_name: 'w-44',
+                decklist_count: 'w-36',
+                match_wins: 'w-28',
+                match_draws: 'w-28',
+                match_losses: 'w-28',
                 points: 'w-28',
             },
             sortable: [...this.columns, ...this.formulas.map(f => f.name)],
             sortBy: {
-                col: 'points',
-                asc: false,
+                col: 'rank',
+                asc: true,
             },
             pagination: {
                 perPage: 10,
@@ -370,7 +346,7 @@ export default {
         filteredData() {
             return this.players
                 .filter(p =>
-                    p.name.toLowerCase().includes(this.query.toLowerCase())
+                    p.full_name.toLowerCase().includes(this.query.toLowerCase())
                 )
                 .sort((a, b) => {
                     const comparison = collator.compare(
@@ -426,21 +402,6 @@ export default {
         },
 
         /**
-         * Send a request with the CSV data uploaded.
-         *
-         * @param {Event} event
-         */
-        uploadPlayers(event) {
-            const files = event.target.files || event.dataTransfer.files;
-
-            if (!files.length) return;
-
-            const data = new FormData();
-            data.append('data', files[0]);
-            this.$inertia.post(route('players.store'), data);
-        },
-
-        /**
          * Toggle a tag value for a player.
          *
          * @param {Object} player
@@ -458,10 +419,22 @@ export default {
         },
 
         /**
-         * Wipe all player data.
+         * Refresh the standings from the API, then refresh table.
          */
-        deletePlayers() {
-            this.$inertia.delete(route('players.delete'));
+        async refreshStandings() {
+            try {
+                const response = await axios.post(
+                    route('api.refresh.standings')
+                );
+                this.$inertia.reload({
+                    preserveScroll: true,
+                    onSuccess: () =>
+                        this.$root.$emit('success', response?.data?.success),
+                });
+            } catch (error) {
+                const err = error?.response?.data ?? error.message;
+                this.$root.$emit('error', Array.isArray(err) ? err : [err]);
+            }
         },
     },
 };

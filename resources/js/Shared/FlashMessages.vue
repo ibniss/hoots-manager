@@ -6,7 +6,7 @@
             leave-to-class="transform opacity-0"
         >
             <div
-                v-if="$page.flash.success && show"
+                v-if="success && show"
                 class="group relative flex items-start space-x-4 shadow rounded-md bg-green-100 text-green-700 text-sm p-4 w-full cursor-pointer"
                 @click="show = false"
             >
@@ -22,7 +22,7 @@
                     />
                 </svg>
                 <span class="flex-grow font-semibold">
-                    {{ $page.flash.success }}
+                    {{ success }}
                 </span>
                 <div class="absolute top-0 right-0 pt-3.5 pr-4">
                     <button
@@ -46,11 +46,7 @@
                 </div>
             </div>
             <div
-                v-if="
-                    ($page.flash.error ||
-                        Object.keys($page.errors).length > 0) &&
-                    show
-                "
+                v-if="errors.length > 0 && show"
                 class="group relative flex items-start space-x-4 shadow rounded-md bg-red-100 text-red-700 text-sm p-4 w-full cursor-pointer"
                 @click="show = false"
             >
@@ -65,21 +61,14 @@
                         clip-rule="evenodd"
                     />
                 </svg>
-                <div v-if="$page.flash.error" class="flex-grow font-semibold">
-                    {{ $page.flash.error }}
-                </div>
-                <div v-else class="flex-grow mx-8">
-                    <span
-                        v-if="Object.keys($page.errors).length === 1"
-                        class="font-semibold"
-                    >
-                        {{ Object.values($page.errors)[0] }}
+                <div class="flex-grow mx-8">
+                    <span v-if="errors.length === 1" class="font-semibold">
+                        {{ errors[0] }}
                     </span>
                     <span v-else>
                         <p class="font-semibold">
                             There were
-                            {{ Object.keys($page.errors).length }} errors with
-                            your submission
+                            {{ errors.length }} errors with your submission
                         </p>
                         <ul class="mt-1 list-disc list-inside font-medium">
                             <li v-for="(error, key) in $page.errors" :key="key">
@@ -117,15 +106,78 @@ export default {
     data() {
         return {
             show: true,
+            errorSet: new Set(),
+            success: null,
+            timeoutId: null,
         };
     },
+    computed: {
+        /**
+         * Get the error set as an array.
+         *
+         * @returns {Array}
+         */
+        errors() {
+            return [...this.errorSet];
+        },
+    },
     watch: {
-        '$page.flash': {
-            handler() {
+        $page: {
+            handler(newPage) {
+                this.clearData();
+
+                // flash part
+                if (newPage.flash.error) {
+                    this.errorSet.add(newPage.flash.error);
+                }
+                this.success = newPage.flash.success;
+
+                // errors part
+                if (Object.values(newPage.errors).length > 0) {
+                    Object.values(newPage.errors).forEach(err =>
+                        this.errorSet.add(err)
+                    );
+                }
+
                 this.show = true;
-                setTimeout(() => (this.show = false), 2000);
+                this.cleanUp();
             },
             deep: true,
+        },
+    },
+    mounted() {
+        this.$root.$on('success', message => {
+            this.clearData();
+            this.success = message;
+            this.show = true;
+            this.cleanUp();
+        });
+
+        this.$root.$on('error', messages => {
+            this.clearData();
+            messages.forEach(err => this.errorSet.add(err));
+            this.show = true;
+            this.cleanUp();
+        });
+    },
+    methods: {
+        /**
+         * Set a timeout to clean up the flash messages.
+         */
+        cleanUp() {
+            clearTimeout(this.timeoutId);
+            this.timeoutId = setTimeout(() => {
+                this.clearData();
+            }, 2000);
+        },
+
+        /**
+         * Clear the flash messages.
+         */
+        clearData() {
+            this.show = false;
+            this.errorSet = new Set();
+            this.success = null;
         },
     },
 };
