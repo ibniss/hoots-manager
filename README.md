@@ -8,7 +8,7 @@ Built to support [HOOTS](https://www.jeffhoogland.com/hooglandia-open-series/) -
 
 The application is in a very early development stage. The currently supported features are:
 
--   importing standings as CSV,
+-   fetching players & standings from MTGMelee API,
 -   adding custom tags to players,
 -   adding custom formulas (using player data and the tags added) creating a custom scoring system which can be used to e.g. pick the "feature matches" to show on broadcast
 
