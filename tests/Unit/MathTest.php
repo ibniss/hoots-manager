@@ -2,7 +2,6 @@
 
 use App\Services\Math;
 
-
 it('calculates basic operations', function (string $equation, float $result) {
   expect(app(Math::class)->evaluate($equation, []))->toBe($result);
 })->with([
@@ -31,4 +30,4 @@ it('evaluates to error when variables are missing', function (string $equation, 
 })->with([
   ['x + y + z', ['x' => 1, 'y' => 2]],
   ['Winner + PreviousEquation', ['Winner' => '10']]
-])->only();
+]);

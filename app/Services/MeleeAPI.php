@@ -3,29 +3,14 @@
 namespace App\Services;
 
 use App\Models\Player;
-use GuzzleHttp\Client;
 use App\Models\Setting;
-use App\Models\Standing;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 
 class MeleeAPI
 {
-  private Client $client;
-
-  public function __construct()
-  {
-    $this->client = new Client([
-      'base_uri' => config('app.melee_base_url'),
-      'auth' => [
-        env('MELEE_CLIENT_ID'),
-        env('MELEE_CLIENT_SECRET')
-      ]
-    ]);
-  }
-
   /**
    * Get a map of ['ApiKey' => 'api_key'] to map fields between the API format and
    * our format.
@@ -69,12 +54,18 @@ class MeleeAPI
   /**
    * Get all players from the API.
    *
+   * @throws \GuzzleHttp\Exception\GuzzleException
    * @return Collection
    */
   public function getPlayers()
   {
-    // TODO: replace with actual API call once it works
-    $players = json_decode(file_get_contents(storage_path('fixtures/players.json')), true);
+    $tournamentId = Setting::whereAttribute('tournament_id')->first()->value;
+    $response = Http::withBasicAuth(
+      env('MELEE_CLIENT_ID'),
+      env('MELEE_CLIENT_SECRET')
+    )->post(config('app.melee_base_url') . "/Tournament/TournamentPlayers/{$tournamentId}");
+    $players = $response->json();
+
     $fieldMap = $this->getColumnMap('players', ['created_at', 'updated_at']);
     return collect($players)->map(fn ($player) => $this->remapData($player, $fieldMap));
   }
@@ -86,8 +77,13 @@ class MeleeAPI
    */
   public function getCurrentStandings()
   {
-    // TODO: replace with actual API call once it works
-    $standings = json_decode(file_get_contents(storage_path('fixtures/standings.json')), true);
+    $tournamentId = Setting::whereAttribute('tournament_id')->first()->value;
+    $response = Http::withBasicAuth(
+      env('MELEE_CLIENT_ID'),
+      env('MELEE_CLIENT_SECRET')
+    )->post(config('app.melee_base_url') . "/Tournament/CurrentStandings/{$tournamentId}");
+    $standings = $response->json();
+
     $playersByDecklist = Player::all()->pluck('id', 'decklist_id');
     $fieldMap = $this->getColumnMap('standings', ['created_at', 'updated_at']);
 

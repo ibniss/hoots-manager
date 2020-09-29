@@ -30,7 +30,7 @@ class PlayerFactory extends Factory
     return [
       'first_name' => $this->faker->firstName,
       'last_name' => $this->faker->lastName,
-      'user_name' => $userName,
+      'username' => $userName,
       'screen_name' => $userName,
       'discord_username' => $userName . '#' . $this->faker->randomNumber(4),
       'player_name' => $userName,

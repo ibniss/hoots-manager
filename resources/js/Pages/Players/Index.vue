@@ -427,6 +427,7 @@ export default {
                     route('api.refresh.standings')
                 );
                 this.$inertia.reload({
+                    preserveScroll: true,
                     onSuccess: () =>
                         this.$root.$emit('success', response?.data?.success),
                 });

@@ -2,16 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Str;
-use Schema;
-use Redirect;
 use App\Models\Player;
 use App\Models\Standing;
 use App\Models\PlayerTag;
 use App\Services\MeleeAPI;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Session;
 
 class MeleeApiController extends Controller
 {

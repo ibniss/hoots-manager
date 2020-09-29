@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1198647,
+        "player_id": null,
+        "match_draws": 0,
+        "match_losses": 1,
+        "match_wins": 9,
+        "points": 27,
+        "rank": 1
+    },
+    {
+        "id": 1198647,
+        "player_id": null,
+        "match_draws": 0,
+        "match_losses": 2,
+        "match_wins": 8,
+        "points": 24,
+        "rank": 2
+    }
+]
