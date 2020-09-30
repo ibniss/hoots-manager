@@ -4,8 +4,12 @@
         "CheckedInTime": "2020-09-19T14:18:39",
         "DateCreated": "2020-08-19T14:08:21",
         "DciNumber": null,
-        "DecklistId": 51962,
-        "DecklistName": "Simic Ramp",
+        "Decklists": [
+            {
+                "ID": 51962,
+                "Name": "Simic Ramp"
+            }
+        ],
         "DiscordUsername": "Tobias1234#4567",
         "FacebookPage": null,
         "FirstName": "Tom",
@@ -31,8 +35,12 @@
         "CheckedInTime": "2020-09-19T13:43:31",
         "DateCreated": "2020-08-19T14:12:26",
         "DciNumber": null,
-        "DecklistId": 51892,
-        "DecklistName": "Dimir Rogues",
+        "Decklists": [
+            {
+                "ID": 51892,
+                "Name": "Dimir Rogues"
+            }
+        ],
         "DiscordUsername": "Beansi#1260",
         "FacebookPage": null,
         "FirstName": "Adam",

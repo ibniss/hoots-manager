@@ -1,0 +1,27 @@
+{
+    "ID": 3110,
+    "Guid": "022d0054-bcd2-5b51-b20b-868979fd816a",
+    "Name": "Hooglandia Open X - Sponsored",
+    "Phases": [
+        {
+            "ID": 4101,
+            "Guid": "6bb9ee4e-b505-54cd-959a-c72f623f149a",
+            "Name": "Play Until 2 Losses Phase",
+            "SortOrder": 1,
+            "Rounds": [
+                {
+                    "ID": 4266,
+                    "Guid": "bfb997e2-db38-5168-9e10-b13dbcd90d4a",
+                    "Name": "Round 1",
+                    "SortOrder": 1
+                },
+                {
+                    "ID": 3534,
+                    "Guid": "828214bd-bf3c-509d-a594-f2cf060735bc",
+                    "Name": "Round 2",
+                    "SortOrder": 2
+                }
+            ]
+        }
+    ]
+}

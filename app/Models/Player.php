@@ -35,6 +35,26 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Player whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Player whereWins($value)
  * @mixin \Eloquent
+ * @property string|null $first_name
+ * @property string|null $last_name
+ * @property string|null $username
+ * @property string|null $screen_name
+ * @property string|null $discord_username
+ * @property string|null $player_name
+ * @property int|null $decklist_id
+ * @property string|null $decklist_name
+ * @property-read string $full_name
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Pairing[] $pairings
+ * @property-read int|null $pairings_count
+ * @property-read \App\Models\Standing|null $standing
+ * @method static \Illuminate\Database\Eloquent\Builder|Player whereDecklistId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Player whereDecklistName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Player whereDiscordUsername($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Player whereFirstName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Player whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Player wherePlayerName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Player whereScreenName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Player whereUsername($value)
  */
 class Player extends Model
 {
@@ -60,6 +80,11 @@ class Player extends Model
   public function decklist()
   {
     return $this->hasOne(Decklist::class);
+  }
+
+  public function pairings()
+  {
+    return $this->hasMany(Pairing::class);
   }
 
   /**

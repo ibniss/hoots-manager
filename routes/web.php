@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FormulaController;
+use App\Http\Controllers\PairingController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\PlayerTagController;
 use App\Http\Controllers\SettingController;
@@ -42,4 +43,8 @@ Route::name('formulas.')->group(function () {
 Route::name('settings.')->group(function () {
   Route::get('/settings', [SettingController::class, 'index'])->name('index');
   Route::put('/settings', [SettingController::class, 'update'])->name('update');
+});
+
+Route::name('pairings.')->group(function () {
+  Route::get('/pairings', [PairingController::class, 'index'])->name('index');
 });
