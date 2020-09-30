@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Round;
 use App\Models\Pairing;
+use App\Models\Setting;
 use App\Services\MeleeAPI;
 use Illuminate\Http\Request;
 
@@ -36,7 +37,7 @@ class PairingController extends Controller
     $roundId = $roundId ? (int) $roundId : null;
 
     return Inertia::render('Pairings/Index', [
-      'columns' => ['player1.player_name', 'player1.decklist_name', 'player2.player_name', 'player2.decklist_name', 'result'],
+      'columns' => ['select', 'copy', 'player1.player_name', 'player1.decklist_name', 'player2.player_name', 'player2.decklist_name', 'result'],
       'rounds' => fn () => $rounds,
       'pairings' => function () use ($roundId) {
         if (!isset($roundId)) {
@@ -59,6 +60,9 @@ class PairingController extends Controller
 
         return $pairings;
       },
+      'pairingsMessageTemplate' => fn () =>
+      Setting::whereAttribute('pairings_template')->first()->value ??
+        config('app.default_pairings_template'),
       'currentRoundId' => fn () => $roundId
     ]);
   }

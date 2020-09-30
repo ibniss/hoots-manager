@@ -30,6 +30,77 @@
                     :options="pagination.perPageOptions"
                     :label-resolver="option => `${option} per page`"
                 />
+                <div class="shadow-sm rounded-md">
+                    <button
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
+                        @click="showCopyPairingsModal = true"
+                    >
+                        Pairings message
+                    </button>
+                    <Modal
+                        max-size="sm:max-w-2xl"
+                        :show.sync="showCopyPairingsModal"
+                    >
+                        <template #body>
+                            <div class="sm:flex sm:items-start">
+                                <div
+                                    class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 sm:mx-0 sm:h-10 sm:w-10"
+                                >
+                                    <svg
+                                        class="h-6 w-6 text-indigo-600"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"
+                                        />
+                                    </svg>
+                                </div>
+                                <div
+                                    class="flex-grow mt-3 sm:mt-0 sm:ml-4 flex flex-col gap-y-4"
+                                >
+                                    <h3
+                                        id="modal-headline"
+                                        class="text-lg font-medium text-gray-900"
+                                    >
+                                        Copy pairings message
+                                    </h3>
+
+                                    <pre class="font-sans">{{
+                                        pairingsMessage
+                                    }}</pre>
+                                </div>
+                            </div>
+                        </template>
+                        <template #footer="{ hide }">
+                            <span
+                                class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto"
+                            >
+                                <button
+                                    type="button"
+                                    class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-indigo-600 text-base font-medium text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm"
+                                >
+                                    Copy
+                                </button>
+                            </span>
+                            <span
+                                class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto"
+                            >
+                                <button
+                                    type="button"
+                                    class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm"
+                                    @click="hide"
+                                >
+                                    Close
+                                </button>
+                            </span>
+                        </template>
+                    </Modal>
+                </div>
             </div>
             <div class="w-full sm:w-auto flex justify-end items-center gap-x-4">
                 <Search v-model="query" class="flex-grow sm:flex-grow-0" />
@@ -97,8 +168,45 @@
                                 <td
                                     :key="`${pairing.id}-${col}`"
                                     class="px-2 py-1 md:p-2 lg:p-3 xl:p-4 lg:whitespace-no-wrap text-sm"
+                                    :class="headings[col] === '' ? 'w-12' : ''"
                                 >
-                                    {{ objectGet(pairing, col) }}
+                                    <template v-if="col === 'select'">
+                                        <Checkbox
+                                            :checked="
+                                                selectedPairings.includes(
+                                                    pairing.id
+                                                )
+                                            "
+                                            size="7"
+                                            @update:checked="
+                                                togglePairingSelection(
+                                                    pairing.id
+                                                )
+                                            "
+                                        />
+                                    </template>
+                                    <template v-else-if="col === 'copy'">
+                                        <button
+                                            class="inline-flex items-center justify-center group focus:outline-none"
+                                            @click="copyPairing(pairing)"
+                                        >
+                                            <svg
+                                                class="h-7 w-7 text-gray-400 group-hover:text-gray-300 transition duration-150 ease-in-out"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                            >
+                                                <path
+                                                    d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"
+                                                />
+                                                <path
+                                                    d="M3 8a2 2 0 012-2v10h8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"
+                                                />
+                                            </svg>
+                                        </button>
+                                    </template>
+                                    <template v-else>
+                                        {{ objectGet(pairing, col) }}
+                                    </template>
                                 </td>
                             </template>
                         </tr>
@@ -125,6 +233,8 @@ import Search from '@/Shared/Search';
 import SortControl from '@/Shared/SortControl';
 import Pagination from '@/Shared/Pagination';
 import ListBox from '@/Shared/ListBox';
+import Checkbox from '@/Shared/Checkbox';
+import Modal from '@/Shared/Modal';
 import Layout from '@/Layouts/Layout';
 import { paginate, objectGet } from '@/Services/helpers';
 
@@ -135,11 +245,15 @@ const collator = new Intl.Collator(undefined, {
 
 export default {
     layout: (h, page) => h(Layout, { props: { title: 'Pairings' } }, [page]),
-    components: { Search, ListBox, SortControl, Pagination },
+    components: { Search, ListBox, SortControl, Pagination, Checkbox, Modal },
     props: {
         pairings: {
             required: true,
             type: Array,
+        },
+        pairingsMessageTemplate: {
+            required: true,
+            type: String,
         },
         columns: {
             required: true,
@@ -156,7 +270,11 @@ export default {
     },
     data() {
         return {
+            selectedPairings: [],
+            showCopyPairingsModal: false,
             headings: {
+                select: '',
+                copy: '',
                 'player1.player_name': 'Player 1',
                 'player1.decklist_name': 'Decklist',
                 'player2.player_name': 'Player 2',
@@ -182,6 +300,48 @@ export default {
     },
     computed: {
         /**
+         * Get the pairings message.
+         *
+         * @returns {String}
+         */
+        pairingsMessage() {
+            const pairings = this.selectedPairings.map(id =>
+                this.pairings.find(x => x.id === id)
+            );
+
+            let pairingsPart = '';
+            let index = 1;
+
+            for (const pairing of pairings) {
+                const player1Discord = pairing.player1.discord_username?.split(
+                    '#'
+                )?.[0];
+                const player2Discord = pairing.player2.discord_username?.split(
+                    '#'
+                )?.[0];
+
+                // if couldn't find discord username
+                if (!player1Discord || !player2Discord) {
+                    const missingPlayer = !player1Discord
+                        ? pairing.player1
+                        : pairing.player2;
+                    return `Discord username missing for player '${missingPlayer.player_name}'`;
+                }
+
+                pairingsPart += `${index}: @${player1Discord} @${player2Discord}\n`;
+                index++;
+            }
+
+            return this.pairingsMessageTemplate
+                .replace(
+                    '[[round_num]]',
+                    this.rounds.find(r => r.id === this.currentRoundId).name
+                )
+                .replace('[[pairings]]', pairingsPart)
+                .trim();
+        },
+
+        /**
          * Get the pagination data.
          *
          * @returns {ReturnType<paginate>}
@@ -194,6 +354,11 @@ export default {
             );
         },
 
+        /**
+         * Filtered table data.
+         *
+         * @returns {Array}
+         */
         filteredData() {
             return this.pairings
                 .filter(
@@ -248,6 +413,59 @@ export default {
             } else {
                 this.sortBy.col = col;
                 this.sortBy.asc = true;
+            }
+        },
+
+        /**
+         * Toggle the selection for a given pairing.
+         *
+         * @param {Number} pairingId
+         */
+        togglePairingSelection(pairingId) {
+            const index = this.selectedPairings.findIndex(x => x === pairingId);
+
+            if (index === -1) {
+                this.selectedPairings.push(pairingId);
+            } else {
+                this.selectedPairings.splice(index, 1);
+            }
+        },
+
+        /**
+         * Copy a given pairing into clipboard.
+         *
+         * @param {Object} pairing
+         */
+        async copyPairing(pairing) {
+            const player1Discord = pairing.player1.discord_username?.split(
+                '#'
+            )?.[0];
+            const player2Discord = pairing.player2.discord_username?.split(
+                '#'
+            )?.[0];
+
+            // if couldn't find discord username
+            if (!player1Discord || !player2Discord) {
+                const missingPlayer = !player1Discord
+                    ? pairing.player1
+                    : pairing.player2;
+                this.$root.$emit('error', [
+                    `Discord username missing for player '${missingPlayer.player_name}'`,
+                ]);
+                return;
+            }
+
+            const copyString = `@${player1Discord} @${player2Discord}`;
+            try {
+                await navigator.clipboard.writeText(copyString);
+                this.$root.$emit(
+                    'success',
+                    `Pairing '${copyString}' successfully copied to clipboard`
+                );
+            } catch {
+                this.$root.$emit('error', [
+                    `Copying '${copyString}' failed due to permission issues`,
+                ]);
             }
         },
     },
