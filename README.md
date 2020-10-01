@@ -8,9 +8,10 @@ Built to support [HOOTS](https://www.jeffhoogland.com/hooglandia-open-series/) -
 
 The application is in a very early development stage. The currently supported features are:
 
--   fetching players & standings from MTGMelee API,
+-   fetching players, standings and pairings from MTGMelee API,
 -   adding custom tags to players,
--   adding custom formulas (using player data and the tags added) creating a custom scoring system which can be used to e.g. pick the "feature matches" to show on broadcast
+-   adding custom formulas (using player data and the tags added) creating a custom scoring system which can be used to e.g. pick the "feature matches" to show on broadcast,
+-   displaying pairings for each round, with formulas for each pairing tallied, with the ability to select feature matches and copy them in a Discord-friendly, customisable format
 
 ## The stack
 
