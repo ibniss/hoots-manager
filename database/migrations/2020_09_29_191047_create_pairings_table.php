@@ -16,8 +16,8 @@ class CreatePairingsTable extends Migration
     Schema::create('pairings', function (Blueprint $table) {
       $table->uuid('id');
       $table->unsignedBigInteger('round_id');
-      $table->unsignedBigInteger('player_1_id');
-      $table->unsignedBigInteger('player_2_id');
+      $table->unsignedBigInteger('player_1_id')->nullable();
+      $table->unsignedBigInteger('player_2_id')->nullable();
       $table->string('result');
       $table->timestamps();
     });

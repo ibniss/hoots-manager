@@ -130,26 +130,52 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead>
                     <tr>
-                        <template v-for="column in columns">
+                        <template v-for="column in allColumns">
                             <th
-                                :key="column"
+                                :key="`th-${column.type}-${column.name}`"
                                 class="px-3 py-2 lg:px-4 lg:py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 @click="
-                                    sortable.includes(column) && sort(column)
+                                    sortable.includes(column.name) &&
+                                        sort(column.name)
                                 "
                             >
                                 <div class="flex items-center justify-between">
-                                    <span>
-                                        {{
-                                            column in headings
-                                                ? headings[column]
-                                                : column
-                                        }}
+                                    <span
+                                        class="inline-flex justify-between items-center space-x-0.5"
+                                    >
+                                        <span>
+                                            {{
+                                                column.name in headings
+                                                    ? headings[column.name]
+                                                    : column.name
+                                            }}
+                                        </span>
+                                        <svg
+                                            v-if="column.type === 'formula'"
+                                            v-tooltip="{
+                                                content: findFormula(
+                                                    column.name
+                                                ).equation,
+                                                classes: 'font-mono',
+                                                boundariesElement: pageContentElement,
+                                            }"
+                                            class="h-4 w-4"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
+                                        >
+                                            <path
+                                                fill-rule="evenodd"
+                                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                                clip-rule="evenodd"
+                                            />
+                                        </svg>
                                     </span>
                                     <SortControl
                                         class="h-4 w-4 text-gray-400"
-                                        :sortable="sortable.includes(column)"
-                                        :sorted="sortBy.col === column"
+                                        :sortable="
+                                            sortable.includes(column.name)
+                                        "
+                                        :sorted="sortBy.col === column.name"
                                         :ascending="sortBy.asc"
                                     />
                                 </div>
@@ -164,13 +190,15 @@
                             :key="pairing.id"
                             :class="i % 2 === 0 ? 'bg-white' : 'bg-gray-50'"
                         >
-                            <template v-for="col in columns">
+                            <template v-for="col in allColumns">
                                 <td
-                                    :key="`${pairing.id}-${col}`"
+                                    :key="`${pairing.id}-${col.name}`"
                                     class="px-2 py-1 md:p-2 lg:p-3 xl:p-4 lg:whitespace-no-wrap text-sm"
-                                    :class="headings[col] === '' ? 'w-12' : ''"
+                                    :class="
+                                        headings[col.name] === '' ? 'w-12' : ''
+                                    "
                                 >
-                                    <template v-if="col === 'select'">
+                                    <template v-if="col.name === 'select'">
                                         <Checkbox
                                             :checked="
                                                 selectedPairings.includes(
@@ -185,7 +213,7 @@
                                             "
                                         />
                                     </template>
-                                    <template v-else-if="col === 'copy'">
+                                    <template v-else-if="col.name === 'copy'">
                                         <button
                                             class="inline-flex items-center justify-center group focus:outline-none"
                                             @click="copyPairing(pairing)"
@@ -205,7 +233,7 @@
                                         </button>
                                     </template>
                                     <template v-else>
-                                        {{ objectGet(pairing, col) }}
+                                        {{ objectGet(pairing, col.name) }}
                                     </template>
                                 </td>
                             </template>
@@ -259,6 +287,10 @@ export default {
             required: true,
             type: Array,
         },
+        formulas: {
+            required: true,
+            type: Array,
+        },
         rounds: {
             required: true,
             type: Array,
@@ -286,6 +318,7 @@ export default {
                 'player1.decklist_name',
                 'player2.player_name',
                 'player2.decklist_name',
+                ...this.formulas.map(f => f.name),
             ],
             sortBy: {
                 col: 'player1.player_name',
@@ -296,6 +329,7 @@ export default {
                 perPageOptions: [10, 25, 50, 100],
                 currentPage: 1,
             },
+            pageContentElement: null,
         };
     },
     computed: {
@@ -335,7 +369,8 @@ export default {
             return this.pairingsMessageTemplate
                 .replace(
                     '[[round_num]]',
-                    this.rounds.find(r => r.id === this.currentRoundId).name
+                    this.rounds.find(r => r.id === this.currentRoundId)?.name ??
+                        'Round not found'
                 )
                 .replace('[[pairings]]', pairingsPart)
                 .trim();
@@ -378,9 +413,38 @@ export default {
                     return this.sortBy.asc ? comparison : -1 * comparison;
                 });
         },
+
+        /**
+         * Get all table columns as object of col: 'type'.
+         *
+         * @returns {Array<{ name: string, type: string }>}
+         */
+        allColumns() {
+            return [
+                ...this.columns.map(col => ({ name: col, type: 'column' })),
+                ...this.formulas.map(formula => ({
+                    name: formula.name,
+                    type: 'formula',
+                })),
+            ];
+        },
+    },
+    mounted() {
+        // we need the right DOM target to allow tooltips to properly fill available space
+        this.pageContentElement = document.querySelector('#pageContent');
     },
     methods: {
         objectGet,
+        /**
+         * Find a formula by its name.
+         *
+         * @param {String} col
+         * @returns {Object|undefined}
+         */
+        findFormula(col) {
+            return this.formulas.find(f => f.name === col);
+        },
+
         /**
          * Manually refresh pairings for the current round from the API, then refresh table.
          */
