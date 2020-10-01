@@ -25,3 +25,13 @@ export const paginate = (data, pageNumber, perPage) => {
         forPage: data.slice(start, end),
     };
 };
+
+/**
+ * Get a value from an object with nested dot notation.
+ *
+ * @param {Object} object
+ * @param {string} key
+ * @returns {any}
+ */
+export const objectGet = (object, key) =>
+    key.split('.').reduce((obj, i) => obj?.[i] ?? null, object);

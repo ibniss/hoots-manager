@@ -232,7 +232,7 @@ return [
 
   // app specific config
   'default_pairings_template' => env('APP_DEFAULT_PAIRINGS_TEMPLATE', <<<EOT
-Round [[round_num]] Feature Matches:
+[[round_num]] Feature Matches:
 [[pairings]]
 Please wait to begin until we tell you to.
 @OpenParticipant if you are not a feature, you can begin your match!

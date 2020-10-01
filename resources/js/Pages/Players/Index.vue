@@ -60,32 +60,7 @@
                 </ColumnsPicker>
             </div>
             <div class="w-full sm:w-auto flex justify-end items-center gap-x-4">
-                <div
-                    class="flex-grow sm:flex-grow-0 relative rounded-md shadow-sm"
-                >
-                    <div
-                        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                    >
-                        <svg
-                            class="text-gray-400 h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                        >
-                            <path
-                                fill-rule="evenodd"
-                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
-                    </div>
-                    <input
-                        id="price"
-                        v-model="query"
-                        class="form-input block w-full pl-10 pr-12 text-sm"
-                        placeholder="Search"
-                        type="text"
-                    />
-                </div>
+                <Search v-model="query" class="flex-grow sm:flex-grow-0" />
                 <span class="shadow-sm rounded-md">
                     <button
                         class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
@@ -262,6 +237,7 @@ import Checkbox from '@/Shared/Checkbox';
 import ListBox from '@/Shared/ListBox';
 import SortControl from '@/Shared/SortControl';
 import ColumnsPicker from '@/Shared/ColumnsPicker';
+import Search from '@/Shared/Search';
 import Pagination from '@/Shared/Pagination';
 import { sentenceCase, paginate } from '@/Services/helpers';
 
@@ -272,7 +248,14 @@ const collator = new Intl.Collator(undefined, {
 
 export default {
     layout: (h, page) => h(Layout, { props: { title: 'Players' } }, [page]),
-    components: { Checkbox, SortControl, ListBox, ColumnsPicker, Pagination },
+    components: {
+        Checkbox,
+        SortControl,
+        ListBox,
+        ColumnsPicker,
+        Pagination,
+        Search,
+    },
     props: {
         columns: {
             required: true,

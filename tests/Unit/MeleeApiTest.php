@@ -29,8 +29,8 @@ it('parses standings data and matches players by decklist', function () {
   $parsedStandingFixture = json_decode(file_get_contents(__DIR__ . '/../Fixtures/standings_parsed.json'), true);
 
   // make sure the decklist IDs point at the right players
-  $standingFixture[0]['DecklistId'] = $players[0]->decklist_id;
-  $standingFixture[1]['DecklistId'] = $players[1]->decklist_id;
+  $standingFixture[0]['Decklists'][0]['ID'] = $players[0]->decklist_id;
+  $standingFixture[1]['Decklists'][0]['ID'] = $players[1]->decklist_id;
 
   $parsedStandingFixture[0]['player_id'] = $players[0]->id;
   $parsedStandingFixture[1]['player_id'] = $players[1]->id;
@@ -41,4 +41,28 @@ it('parses standings data and matches players by decklist', function () {
 
   $response = app(MeleeAPI::class)->getCurrentStandings();
   expect($response)->toEqual(collect($parsedStandingFixture));
+});
+
+it('parses rounds data', function () {
+  $roundFixture = json_decode(file_get_contents(__DIR__ . '/../Fixtures/rounds_api.json'), true);
+  $parsedRoundFixture = collect(json_decode(file_get_contents(__DIR__ . '/../Fixtures/rounds_parsed.json'), true));
+
+  Http::fake([
+    '*' => Http::response($roundFixture, 200)
+  ]);
+
+  $response = app(MeleeAPI::class)->getRounds();
+  expect($response)->toEqual($parsedRoundFixture);
+});
+
+it('parses pairings data', function () {
+  $pairingFixture = json_decode(file_get_contents(__DIR__ . '/../Fixtures/pairings_api.json'), true);
+  $parsedPairingFixture = collect(json_decode(file_get_contents(__DIR__ . '/../Fixtures/pairings_parsed.json'), true));
+
+  Http::fake([
+    '*' => Http::response($pairingFixture, 200)
+  ]);
+
+  $response = app(MeleeAPI::class)->getPairings(1);
+  expect($response)->toEqual($parsedPairingFixture);
 });

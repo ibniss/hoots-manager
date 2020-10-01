@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::name('api.')->group(function () {
   Route::name('refresh.')->prefix('refresh')->group(function () {
     Route::post('players', [MeleeApiController::class, 'players'])->name('players');
+    Route::post('pairings', [MeleeApiController::class, 'pairings'])->name('pairings');
     Route::post('standings', [MeleeApiController::class, 'standings'])->name('standings');
+    Route::post('rounds', [MeleeApiController::class, 'rounds'])->name('rounds');
   });
 });

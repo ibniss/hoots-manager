@@ -64,6 +64,11 @@ export default {
                     activePart: 'players',
                 },
                 {
+                    name: 'Pairings',
+                    url: route('pairings.index'),
+                    activePart: 'pairings',
+                },
+                {
                     name: 'Tags',
                     url: route('tags.index'),
                     activePart: 'tags',

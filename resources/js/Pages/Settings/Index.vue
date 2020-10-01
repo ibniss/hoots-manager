@@ -81,8 +81,7 @@
                 <div class="space-y-2 py-2 text-sm font-medium text-gray-600">
                     <h4>Refresh player data</h4>
                     <p class="text-xs font-normal text-gray-500">
-                        Warning: this will wipe players and associated tags and
-                        attempt to re-fetch players from MTGMelee
+                        Refetch player data - wipes associated tags
                     </p>
                 </div>
                 <span class="shadow-sm rounded-md">
@@ -101,7 +100,34 @@
                                 clip-rule="evenodd"
                             />
                         </svg>
-                        Refresh
+                        Players
+                    </button>
+                </span>
+            </div>
+            <div class="flex justify-between items-center space-x-4">
+                <div class="space-y-2 py-2 text-sm font-medium text-gray-600">
+                    <h4>Refresh rounds</h4>
+                    <p class="text-xs font-normal text-gray-500">
+                        Refetch round data e.g. count, current round
+                    </p>
+                </div>
+                <span class="shadow-sm rounded-md">
+                    <button
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-50 hover:text-red-600 focus:outline-none focus:shadow-outline focus:border-red-300 active:bg-red-300 transition duration-150 ease-in-out"
+                        @click="resetRounds"
+                    >
+                        <svg
+                            class="h-5 w-5 mr-2"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
+                        Rounds
                     </button>
                 </span>
             </div>
@@ -145,6 +171,19 @@ export default {
         async resetPlayers() {
             try {
                 const response = await axios.post(route('api.refresh.players'));
+                this.$root.$emit('success', response?.data?.success);
+            } catch (error) {
+                const err = error?.response?.data ?? error.message;
+                this.$root.$emit('error', Array.isArray(err) ? err : [err]);
+            }
+        },
+
+        /**
+         * Wipe and re-fetch rounds from API.
+         */
+        async resetRounds() {
+            try {
+                const response = await axios.post(route('api.refresh.rounds'));
                 this.$root.$emit('success', response?.data?.success);
             } catch (error) {
                 const err = error?.response?.data ?? error.message;

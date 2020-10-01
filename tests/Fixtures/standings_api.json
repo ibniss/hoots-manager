@@ -3,8 +3,12 @@
         "ID": 1198647,
         "AccumulatesPoints": true,
         "DciNumber": 345671234,
-        "DecklistId": 51833,
-        "DecklistName": "Gruul Adventures",
+        "Decklists": [
+            {
+                "ID": 51833,
+                "Name": "Gruul Adventures"
+            }
+        ],
         "DiscordUsername": "todd#1234",
         "FacebookPage": null,
         "FirstName": "Thom",
@@ -37,8 +41,12 @@
         "ID": 1198647,
         "AccumulatesPoints": true,
         "DciNumber": 345671234,
-        "DecklistId": 51914,
-        "DecklistName": "Mono-Red Aggro",
+        "Decklists": [
+            {
+                "ID": 51914,
+                "Name": "Mono-Red Aggro"
+            }
+        ],
         "DiscordUsername": "sand#1234",
         "FacebookPage": "sand",
         "FirstName": "Mat",

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pairing;
+use App\Models\Round;
 use App\Models\Player;
 use App\Models\Standing;
 use App\Models\PlayerTag;
 use App\Services\MeleeAPI;
+use Illuminate\Http\Request;
 
 class MeleeApiController extends Controller
 {
@@ -14,6 +17,48 @@ class MeleeApiController extends Controller
   public function __construct(MeleeAPI $meleeAPI)
   {
     $this->api = $meleeAPI;
+  }
+
+  /**
+   * Refresh the rounds data from API.
+   *
+   * @return \Illuminate\Http\RedirectResponse
+   */
+  public function rounds()
+  {
+    $rounds = $this->api->getRounds();
+
+    $rounds->each(fn ($round) =>
+    Round::updateOrCreate(
+      ['id' => $round['id']],
+      $round
+    ));
+    return response()->json([
+      'success' => 'Rounds refreshed successfully.'
+    ]);
+  }
+
+  /**
+   * Refresh pairings for a given round from API.
+   *
+   * @param Request $request
+   * @return \Illuminate\Http\RedirectResponse
+   */
+  public function pairings(Request $request)
+  {
+    $request->validate([
+      'round_id' => 'required|integer'
+    ]);
+
+    $pairings = $this->api->getPairings($request->input('round_id'));
+    $pairings->each(fn ($pairing) =>
+    Pairing::updateOrCreate(
+      ['id' => $pairing['id']],
+      $pairing
+    ));
+    return response()->json([
+      'success' => 'Pairings refreshed successfully.'
+    ]);
   }
 
   /**
