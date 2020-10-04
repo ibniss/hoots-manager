@@ -30,16 +30,82 @@
                     :options="pagination.perPageOptions"
                     :label-resolver="option => `${option} per page`"
                 />
+                <ColumnsPicker
+                    id="columnPicker"
+                    :columns="
+                        allColumns.filter(
+                            c => !['select', 'copy'].includes(c.name)
+                        )
+                    "
+                    :hidden-columns.sync="hiddenColumns"
+                >
+                    <template #column="{ column }">
+                        <div
+                            class="w-full flex justify-between items-center gap-x-2"
+                        >
+                            <span>
+                                {{
+                                    column.name in headings
+                                        ? headings[column.name]
+                                        : column.name
+                                }}
+                            </span>
+                            <svg
+                                class="h-5 w-5"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                            >
+                                <!-- swap out the svg depending on the tag -->
+                                <template v-if="column.type === 'column'">
+                                    <path
+                                        d="M3 12v3c0 1.657 3.134 3 7 3s7-1.343 7-3v-3c0 1.657-3.134 3-7 3s-7-1.343-7-3z"
+                                    />
+                                    <path
+                                        d="M3 7v3c0 1.657 3.134 3 7 3s7-1.343 7-3V7c0 1.657-3.134 3-7 3S3 8.657 3 7z"
+                                    />
+                                    <path
+                                        d="M17 5c0 1.657-3.134 3-7 3S3 6.657 3 5s3.134-3 7-3 7 1.343 7 3z"
+                                    />
+                                </template>
+                                <path
+                                    v-if="column.type === 'formula'"
+                                    fill-rule="evenodd"
+                                    d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm2 1a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zm4-4a1 1 0 100 2h.01a1 1 0 100-2H13zM9 9a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zM7 8a1 1 0 000 2h.01a1 1 0 000-2H7z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                        </div>
+                    </template>
+                </ColumnsPicker>
                 <div class="shadow-sm rounded-md">
                     <button
-                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
-                        @click="showCopyPairingsModal = true"
+                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:shadow-outline focus:border-indigo-700 active:bg-indigo-700 transition duration-150 ease-in-out"
+                        @click="copyPairingsMessage"
                     >
-                        Pairings message
+                        <svg
+                            class="h-5 w-5"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"
+                            />
+                            <path
+                                d="M3 8a2 2 0 012-2v10h8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"
+                            />
+                        </svg>
+                    </button>
+                </div>
+                <div class="shadow-sm rounded-md">
+                    <button
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-50 hover:text-indigo-600 focus:outline-none focus:shadow-outline focus:border-indigo-300 active:bg-indigo-300 transition duration-150 ease-in-out"
+                        @click="showPreviewPairingsMessageModal = true"
+                    >
+                        Preview message
                     </button>
                     <Modal
                         max-size="sm:max-w-2xl"
-                        :show.sync="showCopyPairingsModal"
+                        :show.sync="showPreviewPairingsMessageModal"
                     >
                         <template #body>
                             <div class="sm:flex sm:items-start">
@@ -67,7 +133,7 @@
                                         id="modal-headline"
                                         class="text-lg font-medium text-gray-900"
                                     >
-                                        Copy pairings message
+                                        Preview pairings message
                                     </h3>
 
                                     <pre class="font-sans">{{
@@ -77,16 +143,6 @@
                             </div>
                         </template>
                         <template #footer="{ hide }">
-                            <span
-                                class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto"
-                            >
-                                <button
-                                    type="button"
-                                    class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-indigo-600 text-base font-medium text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline transition ease-in-out duration-150 sm:text-sm"
-                                >
-                                    Copy
-                                </button>
-                            </span>
                             <span
                                 class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto"
                             >
@@ -132,6 +188,11 @@
                     <tr>
                         <template v-for="column in allColumns">
                             <th
+                                v-if="
+                                    !hiddenColumns.includes(
+                                        column.type + '-' + column.name
+                                    )
+                                "
                                 :key="`th-${column.type}-${column.name}`"
                                 class="px-3 py-2 lg:px-4 lg:py-3 bg-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 @click="
@@ -192,6 +253,11 @@
                         >
                             <template v-for="col in allColumns">
                                 <td
+                                    v-if="
+                                        !hiddenColumns.includes(
+                                            col.type + '-' + col.name
+                                        )
+                                    "
                                     :key="`${pairing.id}-${col.name}`"
                                     class="px-2 py-1 md:p-2 lg:p-3 xl:p-4 lg:whitespace-no-wrap text-sm"
                                     :class="
@@ -264,6 +330,7 @@ import ListBox from '@/Shared/ListBox';
 import Checkbox from '@/Shared/Checkbox';
 import Modal from '@/Shared/Modal';
 import Layout from '@/Layouts/Layout';
+import ColumnsPicker from '@/Shared/ColumnsPicker';
 import { paginate, objectGet } from '@/Services/helpers';
 
 const collator = new Intl.Collator(undefined, {
@@ -273,7 +340,15 @@ const collator = new Intl.Collator(undefined, {
 
 export default {
     layout: (h, page) => h(Layout, { props: { title: 'Pairings' } }, [page]),
-    components: { Search, ListBox, SortControl, Pagination, Checkbox, Modal },
+    components: {
+        Search,
+        ListBox,
+        SortControl,
+        Pagination,
+        Checkbox,
+        Modal,
+        ColumnsPicker,
+    },
     props: {
         pairings: {
             required: true,
@@ -303,7 +378,7 @@ export default {
     data() {
         return {
             selectedPairings: [],
-            showCopyPairingsModal: false,
+            showPreviewPairingsMessageModal: false,
             headings: {
                 select: '',
                 copy: '',
@@ -330,6 +405,7 @@ export default {
                 currentPage: 1,
             },
             pageContentElement: null,
+            hiddenColumns: [],
         };
     },
     computed: {
@@ -528,7 +604,24 @@ export default {
                 );
             } catch {
                 this.$root.$emit('error', [
-                    `Copying '${copyString}' failed due to permission issues`,
+                    `Copying '${copyString}' failed due to insufficient permissions`,
+                ]);
+            }
+        },
+
+        /**
+         * Copy the pairings message into clipboard.
+         */
+        async copyPairingsMessage() {
+            try {
+                await navigator.clipboard.writeText(this.pairingsMessage);
+                this.$root.$emit(
+                    'success',
+                    'Pairings message successfully copied to clipboard'
+                );
+            } catch {
+                this.$root.$emit('error', [
+                    'Copying pairings message failed due to insufficient permissions',
                 ]);
             }
         },
