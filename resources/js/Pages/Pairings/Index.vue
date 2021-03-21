@@ -423,12 +423,8 @@ export default {
             let index = 1;
 
             for (const pairing of pairings) {
-                const player1Discord = pairing.player1.discord_username?.split(
-                    '#'
-                )?.[0];
-                const player2Discord = pairing.player2.discord_username?.split(
-                    '#'
-                )?.[0];
+                const player1Discord = pairing.player1.discord_username;
+                const player2Discord = pairing.player2.discord_username;
 
                 // if couldn't find discord username
                 if (!player1Discord || !player2Discord) {
