@@ -49,7 +49,7 @@ class PlayerController extends Controller
           $playerId = $player->id;
           $player->setRawAttributes(array_merge(
             $player->getAttributes(),
-            $player?->standing?->getAttributes() ?? []
+            $player->standing ? $player->standing->getAttributes() : []
           ));
           $player->id = $playerId;
 
