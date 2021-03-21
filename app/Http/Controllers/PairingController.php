@@ -87,7 +87,7 @@ class PairingController extends Controller
    */
   private function computeFormulas(Collection $pairings, Collection $formulas)
   {
-    $players = Player::with('standing')->has('standing')->get();
+    $players = Player::with('standing')->get();
     $deckCounts = $players->groupBy('decklist_name')->map->count();
 
     return $pairings->transform(function (Pairing $pairing) use ($deckCounts, $formulas) {

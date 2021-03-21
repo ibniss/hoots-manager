@@ -28,7 +28,7 @@ class PlayerController extends Controller
   public function index()
   {
     $formulas = Formula::orderBy('order')->get();
-    $players = Player::with('standing')->has('standing')->get();
+    $players = Player::with('standing')->get();
     $deckCounts = $players->groupBy('decklist_name')->map->count();
 
     return Inertia::render('Players/Index', [
@@ -49,7 +49,7 @@ class PlayerController extends Controller
           $playerId = $player->id;
           $player->setRawAttributes(array_merge(
             $player->getAttributes(),
-            $player->standing->getAttributes()
+            $player?->standing?->getAttributes() ?? []
           ));
           $player->id = $playerId;
 
