@@ -90,11 +90,11 @@ class MeleeApiController extends Controller
   public function standings()
   {
     $standings = $this->api->getCurrentStandings();
-    $standings->each(fn ($standingData) =>
-    Standing::updateOrCreate(
-      ['id' => $standingData['id']],
-      $standingData
-    ));
+
+    // Wipe standings
+    Standing::truncate();
+
+    $standings->each(fn ($standingData) => Standing::create($standingData));
 
     return response()->json([
       'success' => 'Standings refreshed successfully.'
