@@ -573,12 +573,8 @@ export default {
          * @param {Object} pairing
          */
         async copyPairing(pairing) {
-            const player1Discord = pairing.player1.discord_username?.split(
-                '#'
-            )?.[0];
-            const player2Discord = pairing.player2.discord_username?.split(
-                '#'
-            )?.[0];
+            const player1Discord = pairing.player1.discord_username;
+            const player2Discord = pairing.player2.discord_username;
 
             // if couldn't find discord username
             if (!player1Discord || !player2Discord) {
@@ -591,7 +587,7 @@ export default {
                 return;
             }
 
-            const copyString = `@${player1Discord} @${player2Discord}`;
+            const copyString = `@${player1Discord} vs @${player2Discord}`;
             try {
                 await navigator.clipboard.writeText(copyString);
                 this.$root.$emit(
