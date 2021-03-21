@@ -62,7 +62,7 @@ class MeleeAPI
     $response = Http::withBasicAuth(
       env('MELEE_CLIENT_ID'),
       env('MELEE_CLIENT_SECRET')
-    )->post(config('app.melee_base_url') . "/Tournament/Tournament/{$tournamentId}");
+    )->get(config('app.melee_base_url') . "/Tournament/Tournament/{$tournamentId}");
     $phases = $response->throw()->json('Phases');
 
     $fieldMap = $this->getColumnMap('rounds');
@@ -80,7 +80,7 @@ class MeleeAPI
     $response = Http::withBasicAuth(
       env('MELEE_CLIENT_ID'),
       env('MELEE_CLIENT_SECRET')
-    )->post(config('app.melee_base_url') . "/Tournament/RoundMatches/{$roundId}");
+    )->get(config('app.melee_base_url') . "/Tournament/RoundMatches/{$roundId}");
     $pairings = $response->throw()->json();
 
     $fieldMap = $this->getColumnMap('pairings');
@@ -98,7 +98,7 @@ class MeleeAPI
     $response = Http::withBasicAuth(
       env('MELEE_CLIENT_ID'),
       env('MELEE_CLIENT_SECRET')
-    )->post(config('app.melee_base_url') . "/Tournament/TournamentPlayers/{$tournamentId}");
+    )->get(config('app.melee_base_url') . "/Tournament/TournamentPlayers/{$tournamentId}");
     $players = $response->throw()->json();
 
     $fieldMap = $this->getColumnMap('players');
@@ -124,7 +124,7 @@ class MeleeAPI
     $response = Http::withBasicAuth(
       env('MELEE_CLIENT_ID'),
       env('MELEE_CLIENT_SECRET')
-    )->post(config('app.melee_base_url') . "/Tournament/CurrentStandings/{$tournamentId}");
+    )->get(config('app.melee_base_url') . "/Tournament/CurrentStandings/{$tournamentId}");
     $standings = $response->throw()->json();
 
     $playersByDecklist = Player::all()->pluck('id', 'decklist_id');

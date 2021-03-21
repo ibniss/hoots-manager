@@ -33,6 +33,7 @@ class MeleeApiController extends Controller
       ['id' => $round['id']],
       $round
     ));
+
     return response()->json([
       'success' => 'Rounds refreshed successfully.'
     ]);
@@ -75,6 +76,7 @@ class MeleeApiController extends Controller
     PlayerTag::truncate();
 
     $players->each(fn ($player) => Player::create($player));
+
     return response()->json([
       'success' => 'Players refreshed successfully.'
     ]);
