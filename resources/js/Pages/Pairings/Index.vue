@@ -438,7 +438,7 @@ export default {
                     return `Discord username missing for player '${missingPlayer.player_name}'`;
                 }
 
-                pairingsPart += `${index}: @${player1Discord} @${player2Discord}\n`;
+                pairingsPart += `${index}: @${player1Discord} vs @${player2Discord}\n`;
                 index++;
             }
 
