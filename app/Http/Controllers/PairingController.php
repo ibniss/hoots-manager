@@ -110,7 +110,7 @@ class PairingController extends Controller
 
         foreach ($formulas as $formula) {
           $result = $this->math->evaluate($formula->equation, $variables);
-          $formulaResults[$formula->name] += $this->math->evaluate($formula->equation, $variables);
+          $formulaResults[$formula->name] = $result;
           $variables[$formula->name] = $result;
         }
       }
